@@ -1,0 +1,13 @@
+node-version: PASS (0) 
+npm-version: PASS (0) 
+toolchain-pin: PASS (None) exact version strings match
+react-lock: BLOCKED (None) no lockfile; rerun with --resolve-react-lock after review
+react-ci: NOT RUN (None) missing lock
+react-typecheck: NOT RUN (None) missing lock
+react-production-build: NOT RUN (None) missing lock
+react-browser-install: NOT RUN (None) missing lock
+react-browser-smoke: NOT RUN (None) missing lock
+react-dependency-tree: NOT RUN (None) missing lock
+react-license-inventory: NOT RUN (None) missing lock
+react-audit: NOT RUN (None) missing lock
+Evidence: /mnt/data/snd-r1/so-nong-dan/evidence/local-r1-react-20261127T141912370773Z

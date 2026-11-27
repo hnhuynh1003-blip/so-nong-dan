@@ -1,0 +1,23 @@
+[
+  {
+    "step": "postgres-preflight",
+    "status": "BLOCKED",
+    "exit_code": null,
+    "reason": "explicit --pg-bin local install path required",
+    "command": null
+  },
+  {
+    "step": "postgres-migration",
+    "status": "NOT RUN",
+    "exit_code": null,
+    "reason": "no local toolchain",
+    "command": null
+  },
+  {
+    "step": "postgres-constraints",
+    "status": "NOT RUN",
+    "exit_code": null,
+    "reason": "no local toolchain",
+    "command": null
+  }
+]

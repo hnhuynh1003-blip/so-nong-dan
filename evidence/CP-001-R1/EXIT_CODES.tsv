@@ -1,0 +1,13 @@
+command	status	exit_code
+baseline-integrity	PASS	0
+fallback-lock	PASS	0
+fallback-runner	PASS	0
+node-syntax	PASS	0
+postgres-runner	BLOCKED	1
+preflight	PASS	0
+python-syntax	PASS	0
+react-audit-offline	BLOCKED	1
+react-lock	BLOCKED	1
+react-runner	BLOCKED	1
+toolchain-licenses	PASS	0
+source-diff-check	PASS	0

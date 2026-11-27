@@ -1,0 +1,6 @@
+npm installed npm 10.9.2 license Artistic-2.0
+LICENSE 7610d223851f421d315df5e77974f1c68a04b97e02060e5bbbcf13d95e3ca257 ['The npm application', 'Copyright (c) npm, Inc. and Contributors', 'Licensed on the terms of The Artistic License 2.0']
+tsc installed typescript 5.8.3 license Apache-2.0
+LICENSE.txt a7d00bfd54525bc694b6e32f64c7ebcf5e6b7ae3657be5cc12767bce74654a47 ['Apache License', '', 'Version 2.0, January 2004']
+Node distribution license 1ae62e2015784ba438db7b04ebd33f3c4ff3efdb824c111c4ececd99945fd52d ['Node.js is licensed for use as follows:', '', '"""', 'Copyright Node.js contributors. All rights reserved.', '']
+Only local toolchain license files/metadata inspected; no React transitive or legal approval.

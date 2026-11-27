@@ -1,0 +1,107 @@
+[
+  {
+    "step": "node-version",
+    "status": "PASS",
+    "exit_code": 0,
+    "reason": "",
+    "command": [
+      "node",
+      "--version"
+    ]
+  },
+  {
+    "step": "npm-version",
+    "status": "PASS",
+    "exit_code": 0,
+    "reason": "",
+    "command": [
+      "/opt/nvm/versions/node/v22.16.0/bin/npm",
+      "--version"
+    ]
+  },
+  {
+    "step": "toolchain-pin",
+    "status": "PASS",
+    "exit_code": null,
+    "reason": "exact version strings match",
+    "command": null
+  },
+  {
+    "step": "fallback-ts-version",
+    "status": "PASS",
+    "exit_code": 0,
+    "reason": "",
+    "command": [
+      "/opt/nvm/versions/node/v22.16.0/bin/tsc",
+      "--version"
+    ]
+  },
+  {
+    "step": "fallback-ci",
+    "status": "PASS",
+    "exit_code": 0,
+    "reason": "",
+    "command": [
+      "/opt/nvm/versions/node/v22.16.0/bin/npm",
+      "ci",
+      "--offline",
+      "--ignore-scripts",
+      "--no-audit",
+      "--no-fund"
+    ]
+  },
+  {
+    "step": "fallback-typecheck",
+    "status": "PASS",
+    "exit_code": 0,
+    "reason": "",
+    "command": [
+      "/opt/nvm/versions/node/v22.16.0/bin/npm",
+      "run",
+      "typecheck:fallback"
+    ]
+  },
+  {
+    "step": "contract-typecheck",
+    "status": "PASS",
+    "exit_code": 0,
+    "reason": "",
+    "command": [
+      "/opt/nvm/versions/node/v22.16.0/bin/tsc",
+      "-p",
+      "tsconfig.contract-tests.json"
+    ]
+  },
+  {
+    "step": "fallback-build",
+    "status": "PASS",
+    "exit_code": 0,
+    "reason": "",
+    "command": [
+      "/opt/nvm/versions/node/v22.16.0/bin/npm",
+      "run",
+      "build:fallback"
+    ]
+  },
+  {
+    "step": "fallback-tests",
+    "status": "PASS",
+    "exit_code": 0,
+    "reason": "",
+    "command": [
+      "/opt/nvm/versions/node/v22.16.0/bin/npm",
+      "run",
+      "test:fallback"
+    ]
+  },
+  {
+    "step": "schema-static",
+    "status": "PASS",
+    "exit_code": 0,
+    "reason": "",
+    "command": [
+      "/opt/pyvenv/bin/python3",
+      "scripts/check_schema_r1.py"
+    ]
+  }
+]

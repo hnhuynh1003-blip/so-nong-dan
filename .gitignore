@@ -9,3 +9,6 @@ react-shell/dist/
 backups/
 private-data/
 __pycache__/
+react-shell/playwright-report/
+react-shell/test-results/
+evidence/local-r1-*/

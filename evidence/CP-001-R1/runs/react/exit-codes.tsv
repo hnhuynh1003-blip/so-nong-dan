@@ -1,0 +1,13 @@
+step	status	exit_code	reason
+node-version	PASS	0	
+npm-version	PASS	0	
+toolchain-pin	PASS		exact version strings match
+react-lock	BLOCKED		no lockfile; rerun with --resolve-react-lock after review
+react-ci	NOT RUN		missing lock
+react-typecheck	NOT RUN		missing lock
+react-production-build	NOT RUN		missing lock
+react-browser-install	NOT RUN		missing lock
+react-browser-smoke	NOT RUN		missing lock
+react-dependency-tree	NOT RUN		missing lock
+react-license-inventory	NOT RUN		missing lock
+react-audit	NOT RUN		missing lock

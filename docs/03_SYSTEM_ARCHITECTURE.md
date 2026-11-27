@@ -28,3 +28,5 @@ flowchart TD
 
 ## Performance / autonomy
 50 năm, 1M bao + 1M giao dịch + 10k metadata chứng từ là target, không hard cap. Ảnh object storage; chỉ tải theo nhu cầu. Index owner/date/ID, kỳ, source, land/activity; cursor keyset (date,id), batch/chunk import, server aggregation và virtualization. Benchmark synthetic 1k/100k/1M, p50/p95/error với thiết bị/cache/dataset/config, mục tiêu local write <=150ms, danh sách <=2s, dài hạn <=5s; chưa đo. Định kỳ đo dung lượng DB/index/object/backup/egress, không định mức tiền khi chưa có sizing/provider duyệt. Export portable tránh vendor lock-in; adapter auth/storage riêng. Không AI cho lõi.
+
+R1 supplement: domain transport contracts and draft relations expanded, no change to modular architecture or implementation checkpoints. `docs/12_R1_DOMAIN_CONTRACTS.md` defines rounding registry, multi-land allocation and typed financial links; `13_INVARIANT_REGISTER.md` assigns future gates; `14_TOOLCHAIN_R1.md` separates fallback from React production testing. No live DB or engine.

@@ -7,3 +7,6 @@ Raw input string giữ nguyên; mode ba chữ số theo baseline 443 → 44300 g
 Payment không tái ghi revenue/expense; deposit trước giao là liability nhận trước; allocate deposit không tạo cash lần nữa; overpayment/refund không clamp. Sửa phiếu finalized tạo revision có lý do, snapshot raw + rule version + computed values, không recalc lịch sử ngầm. Idempotency: stable UUID + owner, canonical payload hash, same key same payload trả receipt, mismatch reject; optimistic baseVersion; revision và journal cùng commit. Verification/coverage tách biệt; estimate không posting. Thiếu mẫu số hoặc coverage trọng yếu thì không kết luận đầy đủ.
 
 CAL-01..12 trong baseline giữ nguyên làm test vector CP-002, không chạy tại CP-001. Kế hoạch property/boundary: exact rational, rounding tie/scope, signed bigint bounds, null vs zero, replay revision/policy, duplicate idempotency, balanced posting. Fixture CP-001 chỉ kiểm tra serialization shape, không xác minh công thức.
+
+## R1 supplement
+See 12_R1_DOMAIN_CONTRACTS §§2–4 for per-dimension allocation, versioned immutable policy registry, approval provenance and financial subject semantics; 13_INVARIANT_REGISTER for CP-002 gates. No default rounding, no engine implementation.

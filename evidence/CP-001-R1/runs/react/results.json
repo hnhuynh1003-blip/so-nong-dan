@@ -1,0 +1,92 @@
+[
+  {
+    "step": "node-version",
+    "status": "PASS",
+    "exit_code": 0,
+    "reason": "",
+    "command": [
+      "node",
+      "--version"
+    ]
+  },
+  {
+    "step": "npm-version",
+    "status": "PASS",
+    "exit_code": 0,
+    "reason": "",
+    "command": [
+      "/opt/nvm/versions/node/v22.16.0/bin/npm",
+      "--version"
+    ]
+  },
+  {
+    "step": "toolchain-pin",
+    "status": "PASS",
+    "exit_code": null,
+    "reason": "exact version strings match",
+    "command": null
+  },
+  {
+    "step": "react-lock",
+    "status": "BLOCKED",
+    "exit_code": null,
+    "reason": "no lockfile; rerun with --resolve-react-lock after review",
+    "command": null
+  },
+  {
+    "step": "react-ci",
+    "status": "NOT RUN",
+    "exit_code": null,
+    "reason": "missing lock",
+    "command": null
+  },
+  {
+    "step": "react-typecheck",
+    "status": "NOT RUN",
+    "exit_code": null,
+    "reason": "missing lock",
+    "command": null
+  },
+  {
+    "step": "react-production-build",
+    "status": "NOT RUN",
+    "exit_code": null,
+    "reason": "missing lock",
+    "command": null
+  },
+  {
+    "step": "react-browser-install",
+    "status": "NOT RUN",
+    "exit_code": null,
+    "reason": "missing lock",
+    "command": null
+  },
+  {
+    "step": "react-browser-smoke",
+    "status": "NOT RUN",
+    "exit_code": null,
+    "reason": "missing lock",
+    "command": null
+  },
+  {
+    "step": "react-dependency-tree",
+    "status": "NOT RUN",
+    "exit_code": null,
+    "reason": "missing lock",
+    "command": null
+  },
+  {
+    "step": "react-license-inventory",
+    "status": "NOT RUN",
+    "exit_code": null,
+    "reason": "missing lock",
+    "command": null
+  },
+  {
+    "step": "react-audit",
+    "status": "NOT RUN",
+    "exit_code": null,
+    "reason": "missing lock",
+    "command": null
+  }
+]

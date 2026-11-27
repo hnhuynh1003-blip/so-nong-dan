@@ -1,0 +1,4 @@
+step	status	exit_code	reason
+postgres-preflight	BLOCKED		explicit --pg-bin local install path required
+postgres-migration	NOT RUN		no local toolchain
+postgres-constraints	NOT RUN		no local toolchain

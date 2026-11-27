@@ -1,0 +1,4 @@
+
+> so-nong-dan@0.1.1 build:fallback
+> node scripts/clean-fallback.mjs && tsc && node scripts/build.mjs
+

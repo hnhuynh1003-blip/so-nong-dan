@@ -1,0 +1,4 @@
+postgres-preflight: BLOCKED (None) explicit --pg-bin local install path required
+postgres-migration: NOT RUN (None) no local toolchain
+postgres-constraints: NOT RUN (None) no local toolchain
+Evidence: /mnt/data/snd-r1/so-nong-dan/evidence/local-r1-postgres-20261127T141913287141Z

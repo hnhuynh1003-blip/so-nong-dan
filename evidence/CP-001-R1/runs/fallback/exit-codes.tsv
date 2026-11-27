@@ -1,0 +1,11 @@
+step	status	exit_code	reason
+node-version	PASS	0	
+npm-version	PASS	0	
+toolchain-pin	PASS		exact version strings match
+fallback-ts-version	PASS	0	
+fallback-ci	PASS	0	
+fallback-typecheck	PASS	0	
+contract-typecheck	PASS	0	
+fallback-build	PASS	0	
+fallback-tests	PASS	0	
+schema-static	PASS	0	

@@ -1,0 +1,16 @@
+UTC collection: 2026-11-27T14:19:02Z
+Linux 6.18.57 x86_64
+v22.16.0
+10.9.2
+Version 5.8.3
+Python 3.13.5
+git version 2.47.3
+Chromium 144.0.7559.96 built on Debian GNU/Linux 13 (trixie)
+psql: NOT FOUND
+postgres: NOT FOUND
+initdb: NOT FOUND
+pg_ctl: NOT FOUND
+docker: NOT FOUND
+pwsh: NOT FOUND
+Python Playwright: 1.57.0
+Git remotes:

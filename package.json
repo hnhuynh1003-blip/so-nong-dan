@@ -1,1 +1,20 @@
-{"name":"so-nong-dan","version":"0.1.0","private":true,"type":"module","scripts":{"typecheck":"tsc --noEmit","build":"tsc && node scripts/build.mjs","test":"npm run build && node --test tests/*.test.mjs","preview":"python3 scripts/serve.py"},"engines":{"node":">=22"}}
+{
+  "name": "so-nong-dan",
+  "version": "0.1.1",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "typecheck:fallback": "tsc --noEmit",
+    "build:fallback": "node scripts/clean-fallback.mjs && tsc && node scripts/build.mjs",
+    "test:fallback": "npm run build:fallback && node --test tests/*.test.mjs",
+    "typecheck": "npm run typecheck:fallback",
+    "build": "npm run build:fallback",
+    "test": "npm run test:fallback",
+    "preview": "python3 scripts/serve.py"
+  },
+  "engines": {
+    "node": "22.16.0",
+    "npm": "10.9.2"
+  },
+  "packageManager": "npm@10.9.2"
+}

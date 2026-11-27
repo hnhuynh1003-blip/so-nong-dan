@@ -1,26 +1,30 @@
-# SỔ NÔNG DÂN — CP-001
+# SỔ NÔNG DÂN — CP-001-R1 v0.1.1
 
-**PARTIAL — chưa nghiệm thu; chỉ dùng dữ liệu giả lập.** Workspace local riêng, không kết nối backend. Hai source UI: shell TypeScript không dependency đã build/test bằng Node; React/Vite draft chưa cài được dependency. Không phải app offline/PWA hoàn chỉnh.
+**PARTIAL — chưa nghiệm thu; chỉ dữ liệu giả lập.** Tiếp tục trực tiếp CP-001 v0.1.0, giữ baseline/evidence cũ, không khởi tạo dự án mới. Workspace local, không backend, không phải app offline/PWA hoàn chỉnh. Không CP-002.
 
-## Chạy shell đã build
-Yêu cầu Node 22, npm 10, TypeScript 5.8.3 có sẵn trên PATH, Python 3. Trên máy có các công cụ đó:
+## Chạy kiểm thử local
 
-```sh
-npm ci --offline --ignore-scripts --no-audit --no-fund
-npm run typecheck
-npm run build
-npm test
-npm run preview
+Yêu cầu Node 22.16.0 / npm 10.9.2 (reproduction pins, không duyệt production), Python 3.13.x, TypeScript 5.8.3 trên PATH cho fallback. Xem `docs/14_TOOLCHAIN_R1.md` trước khi cài công cụ/dependency; đặc biệt không dùng bản Vite 6.3.5 cũ. Windows PowerShell, từ thư mục này:
+
+```powershell
+py -3.13 scripts/local_r1.py fallback
+# Chỉ khi cho phép truy cập public npm registry / browser CDN:
+py -3.13 scripts/local_r1.py react --resolve-react-lock --install-browser
+# Chỉ dùng PostgreSQL binaries local, không truyền database thật:
+py -3.13 scripts/local_r1.py postgres --pg-bin "C:\Program Files\PostgreSQL\17\bin"
 ```
-Mở http://127.0.0.1:4173/ trên máy của bạn. Chỉ bind loopback; sandbox này chặn Chromium truy cập URL (xem log). Không nhập dữ liệu thật. `dist/` tạo từ build, được kèm ZIP để xem lại; không commit vào Git nếu tạo repo sau này.
 
-Kiểm tra browser: cần Python Playwright, Chromium `/usr/bin/chromium` (đổi đường dẫn trong test nếu khác máy). `python tests/browser_smoke.py`. `sh scripts/run_checks.sh` chạy các kiểm tra và ghi exit codes. `tests/browser_mocked.py` là lần thử fixture interception, cũng bị chặn; không phải kiểm thử HTTP thực tế.
+Linux: dùng `python3` thay `py -3.13`; `--pg-bin` là thư mục local binaries. Runner tự tạo evidence mới `evidence/local-r1-*`, không ghi đè CP-001/R1. React lockfile hiện thiếu do EAI_AGAIN; lần chạy local thành công cần gửi cả lockfile, logs, exit codes, screenshots thực tế, diff. PostgreSQL script tạo cluster tạm có mật khẩu ngẫu nhiên, loopback, kiểm tra data_directory trước migration, xóa cluster do chính nó tạo khi dừng thành công. Không dùng DSN, không migration DB thật.
 
-## React draft
-`cd react-shell`, `npm install`, `npm run typecheck`, `npm run build`, `npm run dev` chỉ khi có mạng và sau khi rà soát dependency/version/license. Các phiên bản trong package.json là candidate, chưa được kiểm chứng; không có React lockfile vì install thất bại. Lockfile ở root chỉ dành cho shell không dependency; compiler global là prerequisite ngoài lockfile.
+Fallback `npm run build:fallback` tạo `dist/`, `npm run test:fallback` chạy 9 Node smoke tests, `npm run typecheck:fallback` typecheck. `npm run preview` chỉ phục vụ fallback dist loopback, không bằng chứng React. React build nằm riêng trong `react-shell/dist`, kiểm tra browser production bằng Playwright qua preview loopback. Không mở port ra mạng. **Không chạy scripts/run_checks.sh hoặc old Python browser tests** vì chúng thuộc CP-001 và ghi vào evidence cũ; chúng được giữ để tái hiện lịch sử trong bản sao baseline riêng, không phải R1 runner.
 
-## Tài liệu
-- `docs/01_MASTER_SPECIFICATION.md` baseline nguyên văn; `docs/WORK_CP001_HANDOFF.md` handoff nguyên văn (vai trò thực thi đổi theo yêu cầu hiện tại).
+## Tài liệu và bằng chứng
+
+- `docs/01_MASTER_SPECIFICATION.md`, `docs/WORK_CP001_HANDOFF.md`: baseline nguyên văn.
 - `docs/03_SYSTEM_ARCHITECTURE.md`, `04_DATA_MODEL.md`, `05_CALCULATION_CONTRACT.md`, `09_DECISION_LOG.md`, `10_PROJECT_STATUS.md`, `11_DATA_DICTIONARY.md`, `docs/adr/`.
-- `migrations/0001_schema_draft.sql` chưa chạy; không áp dụng trên DB thật. `scripts/draft_schema.py` sinh lại SQL; `docs/schema-tables.txt` là inventory.
-- `checkpoints/CP-001_REPORT.md` và `evidence/CP-001/`: báo cáo và log thực tế.
+- `docs/12_R1_DOMAIN_CONTRACTS.md`, `13_INVARIANT_REGISTER.md`, `14_TOOLCHAIN_R1.md`: đặc tả bổ sung R1, gates và hướng dẫn Windows.
+- `migrations/0001_schema_draft.sql`: revised unexecuted draft (không phải live upgrade), generator `scripts/draft_schema.py`, static test `scripts/check_schema_r1.py`, disposable SQL smoke `tests/postgres_disposable.sql`. Không seed policy hoặc phê duyệt nghiệp vụ.
+- `checkpoints/CP-001_REPORT.md`, `evidence/CP-001/`: immutable historical snapshot; manifest cũ kiểm tra trên baseline v0.1.0, không phải R1 tree.
+- `checkpoints/CP-001-R1_REPORT.md`, `evidence/CP-001-R1/`: báo cáo, log mới, manifest source và tree. Git bundle riêng lưu commit baseline và R1; không remote.
+
+Không secret/dữ liệu tài chính thật, không deploy, D08–D12 OPEN. Chủ dự án mới có quyền ACCEPTED; Independent Verifier kiểm tra bằng chứng.

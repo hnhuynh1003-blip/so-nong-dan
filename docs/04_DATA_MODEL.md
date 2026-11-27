@@ -1,6 +1,6 @@
 # 04 — Data model / ERD logic (PROPOSED)
 
-SQL draft 42 bảng trong schema `snd`; không chạy PostgreSQL. Tất cả bảng con có composite PK `(owner_id,id)`, FK composite cho các quan hệ typed, timestamps/version. Owner root dùng `id` là scope. UUID do client sinh; chưa quy định UUID version. Business date là ngày địa phương, UTC timestamps kỹ thuật. `BIGINT` VND/gram và `NUMERIC` intermediate; bounds cuối cùng OPEN. `source_records` lưu nguồn bất biến theo contract, không đồng nghĩa đã có DB trigger.
+SQL draft R1 46 bảng trong schema `snd`; không chạy PostgreSQL. R1 supersedes the unexecuted v0 draft (not an upgrade on a live DB). See 12_R1_DOMAIN_CONTRACTS and 13_INVARIANT_REGISTER. Tất cả bảng con có composite PK `(owner_id,id)`, FK composite cho các quan hệ typed, timestamps/version. Owner root dùng `id` là scope. UUID do client sinh; chưa quy định UUID version. Business date là ngày địa phương, UTC timestamps kỹ thuật. `BIGINT` VND/gram và `NUMERIC` intermediate; bounds cuối cùng OPEN. `source_records` lưu nguồn bất biến theo contract, không đồng nghĩa đã có DB trigger.
 
 ```mermaid
 erDiagram
@@ -16,15 +16,30 @@ erDiagram
  WEIGHING_SHEETS ||--o{ WEIGHING_BATCHES : contains
  WEIGHING_BATCHES ||--o{ WEIGHING_ENTRIES : contains
  WEIGHING_SHEETS ||--o{ DEDUCTION_RULES : rules
+ ROUNDING_POLICY_VERSIONS o|--o{ WEIGHING_SHEETS : selects
+ ROUNDING_POLICY_VERSIONS o|--o{ CALCULATION_SNAPSHOTS : records
+ ROUNDING_POLICY_VERSIONS ||--o| ROUNDING_POLICY_APPROVALS : approval
+ ROUNDING_POLICY_VERSIONS o|--o{ SALES : selects
  WEIGHING_SHEETS ||--o{ CALCULATION_SNAPSHOTS : snapshots
  WEIGHING_SHEETS o|--o{ SALES : source
  SALES ||--o{ SALE_LINES : items
  SALES o|--o{ ALLOCATIONS : allocates
+ SALE_LINES o|--o{ ALLOCATIONS : line_partition
  EXPENSES o|--o{ ALLOCATIONS : allocates
  LAND_PARCELS o|--o{ ALLOCATIONS : assigned
  SALES o|--o{ SETTLEMENTS : pays
  EXPENSES o|--o{ SETTLEMENTS : pays
- ACCOUNTS ||--o{ SETTLEMENTS : account
+ ASSETS ||--o{ ASSET_TRANSACTIONS : lifecycle
+ LOANS ||--o{ LOAN_TRANSACTIONS : movement
+ ASSET_TRANSACTIONS o|--o{ SETTLEMENTS : clears
+ LOAN_TRANSACTIONS o|--o{ SETTLEMENTS : clears
+ SETTLEMENTS o|--o{ SETTLEMENTS : applies_deposit
+ ACCOUNTS o|--o{ SETTLEMENTS : cash_account
+ SALES o|--o{ JOURNAL_EVENTS : recognition
+ EXPENSES o|--o{ JOURNAL_EVENTS : recognition
+ SETTLEMENTS o|--o{ JOURNAL_EVENTS : posting
+ ASSET_TRANSACTIONS o|--o{ JOURNAL_EVENTS : posting
+ LOAN_TRANSACTIONS o|--o{ JOURNAL_EVENTS : posting
  JOURNAL_EVENTS ||--o{ JOURNAL_LINES : posts
  ACCOUNTS ||--o{ JOURNAL_LINES : account
  IMPORT_BATCHES ||--o{ IMPORT_ROWS : rows
@@ -40,3 +55,5 @@ SQL có checks đơn giản: nonnegative, positive denominators, XOR sale/expens
 Chưa enforce cross-row: total allocations <= transaction; sale weight partition; bì không overlap và <= gross; batch thuộc đúng sheet của rule; journal event sum debit=credit, source uniqueness theo event semantics, posting/settlement atomic; no historical mutation; date/period required by event type; source/coverage overlap validation; idempotency payload mismatch; import rollback; confirmed data mới được post. Các lỗi này phải bị chặn ở domain/server transaction + DB constraints/triggers thích hợp trong CP sau. Draft có thể cần sửa fields, constraints, indexing và ledger mapping trước khi chạy. Không có policy rounding mặc định; `area_m2` nullable, rent nullable; coverage missing không thành zero.
 
 Draft `BEGIN/COMMIT`, schema mới `snd`; không tự động chạy hoặc drop schema. Trước migration thực: dùng PostgreSQL local disposable, chạy fresh migrate, constraint/security tests, backup/restore; nếu fail sửa migration draft có version. Không dùng DB thật.
+
+R1 policy definitions/approvals have draft append-only triggers; other historical immutability is deferred. All constraints and RLS remain unexecuted in sandbox. See register for explicit deferred gates.

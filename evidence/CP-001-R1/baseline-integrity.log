@@ -1,0 +1,9 @@
+Original handoff SHA-256 OK SO_NONG_DAN_CP001_SOURCE_v0.1.0.zip
+Original handoff SHA-256 OK SO_NONG_DAN_CP001_EVIDENCE.zip
+Original handoff SHA-256 OK CP-001_REPORT.md
+Git baseline vs original ZIP byte-identical 72 / 72
+Old source manifest matches original ZIP 71 / 71
+Old evidence both original ZIPs + R1 tree byte-identical 17 / 17
+CP-000 baseline byte-identical MASTER_SPECIFICATION_v1.0.md
+CP-000 baseline byte-identical WORK_CP001_HANDOFF.md
+No configured git remote; baseline commit 5de563967343e878835921b5dd6c3af581ac2505

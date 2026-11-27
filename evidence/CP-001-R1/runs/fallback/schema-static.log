@@ -1,0 +1,13 @@
+test_decisions_open (__main__.Static.test_decisions_open) ... ok
+test_determinism (__main__.Static.test_determinism) ... ok
+test_fail_closed_declarations (__main__.Static.test_fail_closed_declarations) ... ok
+test_finance_links (__main__.Static.test_finance_links) ... ok
+test_inventory (__main__.Static.test_inventory) ... ok
+test_owner_keys_and_reference_order (__main__.Static.test_owner_keys_and_reference_order) ... ok
+test_policy_registry (__main__.Static.test_policy_registry) ... ok
+test_sale_line_and_allocation_fields (__main__.Static.test_sale_line_and_allocation_fields) ... ok
+
+----------------------------------------------------------------------
+Ran 8 tests in 0.791s
+
+OK
