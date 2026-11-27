@@ -1,6 +1,6 @@
 # CP-001-R2 — CI Verification & Technical Foundation Closure
 
-Status: PARTIAL / NOT ACCEPTED. 2026-11-27. Execution: ChatGPT Chat. Independent Verifier and owner retain decision authority. CP-002 NOT STARTED.
+Status: **VERIFIED by Independent Verifier — pending Owner Acceptance / NOT ACCEPTED.** 2026-11-27. Verified runtime HEAD: `05724c20f51755bc94a948165afb36b892e35fb4`. Execution: ChatGPT Chat. Earlier PARTIAL/NOT RUN statements below are historical records. Independent Verifier and owner retain decision authority. CP-002 NOT STARTED.
 
 ## References and authorization
 
@@ -40,3 +40,13 @@ Owner-triggered verify run [46022965503](https://github.com/hnhuynh1003-blip/so-
 On the tested parent, clean npm ci (both), fallback build/typechecks, Node 9/9, static schema 8/8, React production typecheck/build, Chromium 4/4, dependency inventories and audits all exited 0; desktop/mobile PNG evidence present, both audits 0 vulnerabilities. PostgreSQL 16.16 initdb exit 0, start exit 1 due to Unix socket lock permission denied under /var/run/postgresql. Migration/constraint/RLS runtime NOT RUN. Outer gate exit 1. These results belong only to that tested HEAD.
 
 Remediation: disposable cluster config disables Unix sockets while retaining TCP loopback, SCRAM, identity gate and cleanup. Playwright visible non-symlink results are copied before manifest generation; uploader explicitly excludes hidden paths. Added independent regression gate (synthetic/mock runner tests 3/3 exit 0 locally); Python syntax and schema static 8/8 exit 0 locally. No SQL/lockfile changes, no real PostgreSQL or browser re-run, no new CI triggered. New source manifest covers all tracked paths except itself. New real CI/manifest validation still pending independent review and owner authorization. PARTIAL; D08–D12 OPEN; no ACCEPTED, merge or CP-002.
+
+## Final evidence closure — 2026-11-27
+
+Independent Verifier confirms CI SUCCESS, as relayed by the owner in the FINAL EVIDENCE CLOSURE instruction. Status is VERIFIED by Independent Verifier, pending Owner Acceptance (not ACCEPTED). Verified runtime HEAD `05724c20f51755bc94a948165afb36b892e35fb4`; [run 46025176479](https://github.com/hnhuynh1003-blip/so-nong-dan/actions/runs/46025176479), artifact 15211641914, job 140594613366. GitHub run/job concluded success. Original ZIP SHA-256 `8169c26eee40ba539fbcef392aa5ab66ded755501781206a0491b91b2951eabf` matches API metadata and the independently supplied digest. Original ZIP and exact connector-decoded console log preserved; see [`VERIFY_SUCCESS_46025176479.md`](../evidence/CP-001-R2/VERIFY_SUCCESS_46025176479.md) for provenance, actual exit codes, environment, screenshots and scope.
+
+Clean npm ci both graphs, fallback/contract/React typecheck, fallback and React production build, Node 9/9, static schema 8/8, runner regression 3/3, actual React production Chromium 4/4: PASS. PostgreSQL 16.16 disposable initdb/start/identity/migration/constraints/stop/cleanup: PASS; 46 tables and 92 explicit indexes created, SQL constraint and default-deny RLS smoke passed. Both npm audits report zero vulnerabilities at execution time; license inventories completed with no metadata issues. These technical gates do not constitute full application authentication, financial invariants or A01–A12 product acceptance.
+
+Execution assistant rechecked ZIP integrity/digest, exact outer evidence membership and hashes 58/58, React 17/17, PostgreSQL 13/13, source continuity 158/158, committed manifest 157/157, and empty CI working-tree status before/after. The verified source tree matches the original Git objects; prior failed log was read back separately for the source continuity check. Earlier failed run and bootstrap artifacts/logs remain unchanged. The closure commit adds only successful CI evidence and receipt, updates report/status/README, and regenerates the aggregate R2 source SHA-256 manifest (excludes itself). Previous manifest preserved in verified parent; no new code, SQL, tests, lockfiles or CI workflow changes. Runtime proof belongs to `05724c20f51755bc94a948165afb36b892e35fb4`, not a subsequent documentation-only HEAD; no unnecessary CI run is initiated.
+
+Next gate: Independent Verifier readback of closure commit and Owner Acceptance decision. PR #1 remains draft, not merged or approved. D08–D12 OPEN. CP-002 NOT STARTED.
