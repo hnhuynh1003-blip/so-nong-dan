@@ -7,3 +7,6 @@ CP-002–009 chưa bắt đầu. A01–A12 acceptance matrix sản phẩm đều
 ## CP-001-R1 — v0.1.1
 
 PARTIAL, not ACCEPTED. Imported original Git baseline, retained CP-000 files and all 17 old evidence files byte-identical. R1 data contracts + revised deterministic draft 46 tables/92 explicit indexes, 24 invariants/gates; no engine. Fallback npm ci/typecheck/clean build PASS, 9/9 Node smoke, 8/8 static schema checks, 10 expected-error type assertions checked by separate tsc command. React lock resolution BLOCKED EAI_AGAIN, offline audit command ENOLOCK; React install/typecheck/production build/browser/license inventory NOT RUN. PostgreSQL disposable migration/constraints NOT RUN (no binaries). Windows runner prepared, exercised fallback and prerequisite gates on Linux only; Windows runtime untested. No A01–A12, no CP-002. D08–D12 OPEN. Pending verifier and owner.
+
+## CP-001-R2 — technical CI candidate
+PARTIAL. GitHub handoff completed; R2 is based on original R1 SHA. CI definition and test runner prepared, owner authorization required via PR label; no execution assumed. Root and React genuine locks pending registry access and review. No production deploy, no full auth, no CP-002. See checkpoints/CP-001-R2_REPORT.md and docs/15_CI_R2.md for actual results/gates.

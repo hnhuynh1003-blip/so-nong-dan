@@ -4,17 +4,21 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "typecheck:fallback": "tsc --noEmit",
-    "build:fallback": "node scripts/clean-fallback.mjs && tsc && node scripts/build.mjs",
+    "typecheck:fallback": "node node_modules/typescript/lib/tsc.js --noEmit",
+    "build:fallback": "node scripts/clean-fallback.mjs && node node_modules/typescript/lib/tsc.js && node scripts/build.mjs",
     "test:fallback": "npm run build:fallback && node --test tests/*.test.mjs",
     "typecheck": "npm run typecheck:fallback",
     "build": "npm run build:fallback",
     "test": "npm run test:fallback",
-    "preview": "python3 scripts/serve.py"
+    "preview": "python3 scripts/serve.py",
+    "typecheck:contracts": "node node_modules/typescript/lib/tsc.js -p tsconfig.contract-tests.json"
   },
   "engines": {
     "node": "22.16.0",
     "npm": "10.9.2"
   },
-  "packageManager": "npm@10.9.2"
+  "packageManager": "npm@10.9.2",
+  "devDependencies": {
+    "typescript": "5.8.3"
+  }
 }

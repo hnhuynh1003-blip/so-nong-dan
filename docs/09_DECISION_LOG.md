@@ -21,3 +21,6 @@ Quyết định thực thi tạm thời (không thay nghiệp vụ): E01 fallbac
 
 ## CP-001-R1 execution decisions (PROPOSED)
 E06: local Git import/tag v0.1.0, no remote; supersedes E05 for local only. E07: revise never-executed migration draft in place, no live upgrade; owner-scoped rounding policy UUID, separate immutable approvals, sale-line quantities and explicit finance targets. E08: exact reproducibility toolchain pins; Vite candidate 6.4.6 replaces 6.3.5 due to advisory; no production version/security approval. D08–D12 unchanged OPEN.
+
+## CP-001-R2 execution decisions (PROPOSED)
+E09: Owner created the private GitHub repository and imported both original commits/tags. GitHub is the shared technical source; historical branches stay fixed. D11 remains OPEN for hosting/provider/budget/quota and related decisions. E10: local TypeScript dependency 5.8.3, exact Node/npm reproduction pins, separate committed npm locks required. Old zero-dependency root lock removed rather than misrepresenting the new manifest. E11: owner-labeled same-repository PR CI only, read-only token, immutable official Actions pins; bootstrap artifacts require review and commit before clean verification. No owner acceptance, no D08–D12 closure.
