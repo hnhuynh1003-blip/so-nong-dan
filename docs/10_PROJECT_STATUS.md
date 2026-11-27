@@ -1,6 +1,6 @@
 # 10 — Project status
 
-**Current R2 status: VERIFIED by Independent Verifier; pending Owner Acceptance (NOT ACCEPTED).** Historical status records follow; see final evidence closure below for current gates.
+**Current status (2026-11-27): CP-001 ACCEPTED through CP-001-R2, by Project Owner. CP-002 SPECIFICATION AUTHORIZED, IMPLEMENTATION NOT AUTHORIZED. D08–D12 OPEN.** Earlier PARTIAL, pending-acceptance and NOT RUN technical records below are historical snapshots; see the Owner Acceptance entry at the end for the current gate.
 
 CP-000: SPECIFIED theo baseline; không tự đổi trạng thái. CP-001: PARTIAL, chưa nghiệm thu. TypeScript fallback typecheck/build PASS, Node smoke 9/9 PASS; Chromium loopback 4 errors, fixture interception 4 errors do administrator block; không có ảnh render. React installation BLOCKED; React typecheck/build NOT RUN. PostgreSQL migration NOT RUN, thiếu PostgreSQL. Lint NOT CONFIGURED. Không benchmark, không auth/PWA/IndexedDB/backend, không dữ liệu thật.
 
@@ -22,3 +22,7 @@ R2 verify failure remediation: owner run 46022965503 on 8fbda9d2172b4a1e78e51134
 ## CP-001-R2 — final evidence closure (2026-11-27)
 
 VERIFIED by Independent Verifier, pending Owner Acceptance. Exact runtime HEAD `05724c20f51755bc94a948165afb36b892e35fb4`; CI run 46025176479 SUCCESS, artifact 15211641914, job 140594613366. Clean npm ci/typechecks/builds; Node 9/9, static schema 8/8, runner regression 3/3, Chromium 4/4; PostgreSQL 16.16 disposable migration (46 tables/92 explicit indexes), constraint/default-deny RLS smoke and cleanup PASS. Both npm audits zero reported vulnerabilities, license metadata inventory completed. Outer/React/PostgreSQL evidence manifests 58/58, 17/17, 13/13; CI source continuity 158/158, committed manifest 157/157 and no source drift. Original success ZIP and console log preserved; evidence/documentation-only closure commit; no new runtime execution claimed for closure HEAD. Draft PR #1 not merged. D08–D12 OPEN. A01–A12 NOT RUN, CP-002 NOT STARTED. See report and `evidence/CP-001-R2/VERIFY_SUCCESS_46025176479.md`.
+
+## CP-001-R2 — Owner Acceptance (2026-11-27)
+
+Project Owner explicitly accepted CP-001-R2 on 2026-11-27. Accepted closure HEAD `5f44141824814877cbd5121b13b73f0cf493174d`; verified runtime HEAD `05724c20f51755bc94a948165afb36b892e35fb4` (CI run 46025176479 SUCCESS). CP-001: ACCEPTED through R2. CP-002: SPECIFICATION AUTHORIZED, IMPLEMENTATION NOT AUTHORIZED. This entry records authorization only; no CP-002 specification or implementation work is performed by this acceptance-record commit. D08–D12 remain OPEN; D01–D07 unchanged. A01–A12 product acceptance remains NOT RUN. CP-003–009 not started. No merge, new CI, deploy or Codex. Draft PR #1 remains unmerged; historical branch heads, source, SQL, lockfiles and raw evidence remain unchanged. See `checkpoints/CP-001-R2_OWNER_ACCEPTANCE.md` for the owner's decision and scope.
