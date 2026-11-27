@@ -1,22 +1,20 @@
-# SỔ NÔNG DÂN — CP-001-R1 v0.1.1
+# SỔ NÔNG DÂN — CP-001-R2 candidate
 
-**PARTIAL — chưa nghiệm thu; chỉ dữ liệu giả lập.** Tiếp tục trực tiếp CP-001 v0.1.0, giữ baseline/evidence cũ, không khởi tạo dự án mới. Workspace local, không backend, không phải app offline/PWA hoàn chỉnh. Không CP-002.
+**PARTIAL — chưa nghiệm thu; chỉ dữ liệu giả lập.** Tiếp tục trực tiếp CP-001 v0.1.0, giữ baseline/evidence cũ, không khởi tạo dự án mới. GitHub Private là nguồn kỹ thuật chung; không backend, không phải app offline/PWA hoàn chỉnh. Không CP-002.
 
-## Chạy kiểm thử local
+## CI và kiểm thử local
 
-Yêu cầu Node 22.16.0 / npm 10.9.2 (reproduction pins, không duyệt production), Python 3.13.x, TypeScript 5.8.3 trên PATH cho fallback. Xem `docs/14_TOOLCHAIN_R1.md` trước khi cài công cụ/dependency; đặc biệt không dùng bản Vite 6.3.5 cũ. Windows PowerShell, từ thư mục này:
+CP-001-R2: PARTIAL. Owner đã cấp quyền chạy CI trong hạn mức miễn phí hiện có. Billing/Usage chưa đọc được qua connector; không khởi chạy job có khả năng phát sinh phí trước khi xác minh quota. Xem `docs/15_CI_R2.md` và `checkpoints/CP-001-R2_REPORT.md`.
+
+Dùng Node 22.16.0 / npm 10.9.2, Python 3.13.x; TypeScript 5.8.3 được pin trong từng package, không cài compiler global. Từ bản clone sạch, sau khi được phép tải dependency công khai:
 
 ```powershell
-py -3.13 scripts/local_r1.py fallback
-# Chỉ khi cho phép truy cập public npm registry / browser CDN:
-py -3.13 scripts/local_r1.py react --resolve-react-lock --install-browser
-# Chỉ dùng PostgreSQL binaries local, không truyền database thật:
-py -3.13 scripts/local_r1.py postgres --pg-bin "C:\Program Files\PostgreSQL\17\bin"
+py -3.13 scripts/ci_r2.py bootstrap
+# Review và commit cả hai lockfile thật trước khi verify.
+py -3.13 scripts/ci_r2.py verify
 ```
 
-Linux: dùng `python3` thay `py -3.13`; `--pg-bin` là thư mục local binaries. Runner tự tạo evidence mới `evidence/local-r1-*`, không ghi đè CP-001/R1. React lockfile hiện thiếu do EAI_AGAIN; lần chạy local thành công cần gửi cả lockfile, logs, exit codes, screenshots thực tế, diff. PostgreSQL script tạo cluster tạm có mật khẩu ngẫu nhiên, loopback, kiểm tra data_directory trước migration, xóa cluster do chính nó tạo khi dừng thành công. Không dùng DSN, không migration DB thật.
-
-Fallback `npm run build:fallback` tạo `dist/`, `npm run test:fallback` chạy 9 Node smoke tests, `npm run typecheck:fallback` typecheck. `npm run preview` chỉ phục vụ fallback dist loopback, không bằng chứng React. React build nằm riêng trong `react-shell/dist`, kiểm tra browser production bằng Playwright qua preview loopback. Không mở port ra mạng. **Không chạy scripts/run_checks.sh hoặc old Python browser tests** vì chúng thuộc CP-001 và ghi vào evidence cũ; chúng được giữ để tái hiện lịch sử trong bản sao baseline riêng, không phải R1 runner.
+Linux: `python3` thay `py -3.13`. PostgreSQL cần `pg_config` trên PATH trỏ đến binaries local. Runner chỉ tạo cluster tạm loopback, không nhận DSN/database thật. Fallback và React production có build/test riêng; `npm run preview` chỉ là fallback. Browser production dùng `react-shell/dist`. CI mặc định không chạy khi push hoặc mở PR; chỉ owner gắn label theo runbook. Không chạy lệnh cũ có thể ghi đè evidence lịch sử; dùng đúng runner R2.
 
 ## Tài liệu và bằng chứng
 
@@ -25,6 +23,7 @@ Fallback `npm run build:fallback` tạo `dist/`, `npm run test:fallback` chạy 
 - `docs/12_R1_DOMAIN_CONTRACTS.md`, `13_INVARIANT_REGISTER.md`, `14_TOOLCHAIN_R1.md`: đặc tả bổ sung R1, gates và hướng dẫn Windows.
 - `migrations/0001_schema_draft.sql`: revised unexecuted draft (không phải live upgrade), generator `scripts/draft_schema.py`, static test `scripts/check_schema_r1.py`, disposable SQL smoke `tests/postgres_disposable.sql`. Không seed policy hoặc phê duyệt nghiệp vụ.
 - `checkpoints/CP-001_REPORT.md`, `evidence/CP-001/`: immutable historical snapshot; manifest cũ kiểm tra trên baseline v0.1.0, không phải R1 tree.
-- `checkpoints/CP-001-R1_REPORT.md`, `evidence/CP-001-R1/`: báo cáo, log mới, manifest source và tree. Git bundle riêng lưu commit baseline và R1; không remote.
+- `checkpoints/CP-001-R1_REPORT.md`, `evidence/CP-001-R1/`: báo cáo, log mới, manifest source và tree. Git bundle lịch sử lưu commit baseline và R1. Hai branch và tag đã có trên GitHub, không merge.
+- `evidence/CP-001-R2/`: báo cáo kiểm tra sandbox, exit codes và manifest riêng; CI evidence chưa có.
 
 Không secret/dữ liệu tài chính thật, không deploy, D08–D12 OPEN. Chủ dự án mới có quyền ACCEPTED; Independent Verifier kiểm tra bằng chứng.

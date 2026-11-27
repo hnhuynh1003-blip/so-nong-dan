@@ -45,18 +45,8 @@ def exact_toolchain(npm):
   record('toolchain-pin','BLOCKED',reason='Expected Node 22.16.0 and npm 10.9.2 for this reproduction; propose/version-review alternatives separately');return False
  record('toolchain-pin','PASS',reason='exact version strings match');return True
 def fallback():
- npm=npm_exe()
- if not npm:record('npm','BLOCKED',reason='npm missing');return
- if not exact_toolchain(npm):return
- tsc=shutil.which('tsc.cmd' if os.name=='nt' else 'tsc')
- if not tsc:record('fallback-tsc','BLOCKED',reason='install exact external TypeScript 5.8.3 or add its bin to PATH');return
- if not run('fallback-ts-version',[tsc,'--version']) or output('fallback-ts-version')!='Version 5.8.3':record('fallback-ts-pin','BLOCKED',reason='Expected TS 5.8.3');return
- run('fallback-ci',[npm,'ci','--offline','--ignore-scripts','--no-audit','--no-fund'])
- run('fallback-typecheck',[npm,'run','typecheck:fallback'])
- run('contract-typecheck',[tsc,'-p','tsconfig.contract-tests.json'])
- run('fallback-build',[npm,'run','build:fallback'])
- run('fallback-tests',[npm,'run','test:fallback'])
- run('schema-static',[sys.executable,'scripts/check_schema_r1.py'])
+ # R2 supersedes the historical PATH compiler runner. No uncontrolled global tsc.
+ record('fallback-runner','BLOCKED',reason='Use scripts/ci_r2.py verify with reviewed committed locks; R1 fallback is historical')
 def react():
  npm=npm_exe(); shell=ROOT/'react-shell'; lock=shell/'package-lock.json'
  steps=('react-ci','react-typecheck','react-production-build','react-browser-install','react-browser-smoke','react-dependency-tree','react-license-inventory','react-audit')

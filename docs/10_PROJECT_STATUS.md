@@ -10,3 +10,5 @@ PARTIAL, not ACCEPTED. Imported original Git baseline, retained CP-000 files and
 
 ## CP-001-R2 — technical CI candidate
 PARTIAL. GitHub handoff completed; R2 is based on original R1 SHA. CI definition and test runner prepared, owner authorization required via PR label; no execution assumed. Root and React genuine locks pending registry access and review. No production deploy, no full auth, no CP-002. See checkpoints/CP-001-R2_REPORT.md and docs/15_CI_R2.md for actual results/gates.
+
+R2 continuation: owner authorization received (free quota only). Exact previous R2 Git tree rechecked in clean sandbox archive: fallback typecheck/build, contracts typecheck, Node 9/9, schema 8/8 PASS with copied local TS 5.8.3, not npm ci. No source drift. Genuine locks blocked; React/Chromium/PostgreSQL runtime/audit not verified. Draft PR is for review only. CI activation pending confirmed no-charge usage; no GitHub run claimed. Historical runner disabled to preserve evidence; D08–D12 OPEN.
