@@ -1,0 +1,72 @@
+
+> so-nong-dan@0.1.0 test
+> npm run build && node --test tests/*.test.mjs
+
+
+> so-nong-dan@0.1.0 build
+> tsc && node scripts/build.mjs
+
+TAP version 13
+# Subtest: six unique module routes
+ok 1 - six unique module routes
+  ---
+  duration_ms: 1.156434
+  type: 'test'
+  ...
+# Subtest: module boundary: can-lua
+ok 2 - module boundary: can-lua
+  ---
+  duration_ms: 0.96801
+  type: 'test'
+  ...
+# Subtest: module boundary: ban-tom-cua
+ok 3 - module boundary: ban-tom-cua
+  ---
+  duration_ms: 0.119841
+  type: 'test'
+  ...
+# Subtest: module boundary: chi-phi
+ok 4 - module boundary: chi-phi
+  ---
+  duration_ms: 0.076055
+  type: 'test'
+  ...
+# Subtest: module boundary: dat
+ok 5 - module boundary: dat
+  ---
+  duration_ms: 0.077937
+  type: 'test'
+  ...
+# Subtest: module boundary: quyet-toan
+ok 6 - module boundary: quyet-toan
+  ---
+  duration_ms: 0.133011
+  type: 'test'
+  ...
+# Subtest: module boundary: nhap-du-lieu
+ok 7 - module boundary: nhap-du-lieu
+  ---
+  duration_ms: 0.197357
+  type: 'test'
+  ...
+# Subtest: home and invalid route
+ok 8 - home and invalid route
+  ---
+  duration_ms: 0.096586
+  type: 'test'
+  ...
+# Subtest: synthetic fixture preserves unknown values and string weight
+ok 9 - synthetic fixture preserves unknown values and string weight
+  ---
+  duration_ms: 6.488567
+  type: 'test'
+  ...
+1..9
+# tests 9
+# suites 0
+# pass 9
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 68.515832

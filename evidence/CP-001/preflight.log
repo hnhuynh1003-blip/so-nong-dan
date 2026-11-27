@@ -1,0 +1,13 @@
+2026-11-27T13:59:22Z
+Linux bdf5aa077553 6.18.57 #1 SMP Tue Oct 20 21:56:04 UTC 2026 x86_64 GNU/Linux
+v22.16.0
+10.9.2
+Version 5.8.3
+git version 2.47.3
+Python 3.13.5
+Chromium 144.0.7559.96 built on Debian GNU/Linux 13 (trixie)
+playwright 1.57.0
+psql NOT FOUND
+postgres NOT FOUND
+pg_ctl NOT FOUND
+https://registry.npmjs.org/

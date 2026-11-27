@@ -1,0 +1,2 @@
+PASS deterministic regeneration, 42 unique table definitions, declared reference names, RLS statements present. Static text checks only, NOT SQL syntax/DB execution or security verification.
+SHA256 ce9bc4809d32d20779f45a82a339b7bcc77793e3acbccdd91d45277b8ea97a2f

@@ -1,0 +1,20 @@
+# 09 — Decision log
+
+Giữ D01–D12 đúng baseline, không tự đóng OPEN.
+
+| ID | Trạng thái | Nội dung |
+|---|---|---|
+| D01 | CONFIRMED | Một gia đình, một người quản lý, không thương mại hóa |
+| D02 | CONFIRMED | Lúa/tôm/cua chung đất; đất nhà/thuê; một vụ lúa cuối năm |
+| D03 | CONFIRMED | Chat + Work; không Codex. CP-001 này thực thi bằng Chat theo yêu cầu mới; cuộc trò chuyện khác điều phối/kiểm tra. |
+| D04 | CONFIRMED | Ưu tiên dữ liệu nhiều năm hơn multi-user |
+| D05 | PROPOSED | React/TS/Vite, PWA, IndexedDB/Dexie, PostgreSQL candidate; fallback TS không đổi stack đích |
+| D06 | PROPOSED | Balanced ledger, domain tách UI |
+| D07 | PROPOSED | 50 năm; 1M + 1M + 10k; benchmark/chi phí chưa đo |
+| D08 | OPEN | Rounding, tie, thứ tự, scope |
+| D09 | OPEN | Công đất, diện tích, thuê, kỳ sản xuất |
+| D10 | OPEN | Thứ tự/màu ô app cũ, thanh toán/coverage 2025 |
+| D11 | OPEN | Repo, hosting, provider, ngân sách/quota, quyền và thiết bị |
+| D12 | OPEN | Định giá/khấu hao/tồn kho/phân bổ chung |
+
+Quyết định thực thi tạm thời (không thay nghiệp vụ): E01 fallback TS thuần khi npm blocked, React draft riêng; E02 hash routes cho static preview; E03 SQL schema `snd`, owner-scoped composite keys và fail-closed draft; E04 Node test runner + Python Playwright có sẵn; E05 không tạo Git repo từ xa hoặc local commit, bàn giao ZIP. Tất cả cần review; không xác nhận stack/versions/license/chi phí. Không thêm giá trị tài chính/đơn vị/rounding giả định.

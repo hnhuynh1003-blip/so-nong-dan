@@ -1,0 +1,6 @@
+# ADR 0002 — Offline and data integrity
+Status: PROPOSED.
+
+Choose local-first transaction record+outbox, server authoritative versioned commit/receipt, not cache-only or last-write-wins. Client-generated stable UUID and mutation ID, owner-scoped partition, optimistic base version; same mutation+hash returns same receipt, mismatched hash or stale version enters conflict. Resolve financial/cân conflicts explicitly with owner review and revision; never silently merge. Backoff/jitter, no loss on app reload, ACK after server commit. Keep pending data during auth expiry; sync requires re-auth. Clear local data only after explicit export/confirmation; device theft/browser eviction remains risk. No first-load offline guarantee.
+
+PWA shell cache separated from durable records; schema upgrades versioned and tested with existing pending outbox. RLS default deny and owner-only private storage, server derives owner. Backup lossless independent of cache and provider; local pending export; encrypted/controlled backups, checksum/restore rehearsal. RPO/RTO targets not measured. Alternatives rejected: online-only (field connectivity), silent merge (financial errors), cache as backup (eviction). No PWA/IndexedDB/auth/sync implementation or tests this CP. See architecture and data model. Test plan A03/A08/A09/A10 in later CPs; no PASS claims.
