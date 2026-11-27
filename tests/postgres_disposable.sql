@@ -63,6 +63,43 @@ BEGIN
  BEGIN INSERT INTO snd.settlements(id,owner_id,kind,sale_id,account_id,cash_direction,amount_vnd,source_id,verification) VALUES(bad,o,'receipt',sale1,a,'out',1,s,'unverified'); RAISE EXCEPTION 'wrong receipt direction unexpectedly accepted'; EXCEPTION WHEN check_violation THEN NULL; END;
  RAISE NOTICE 'finance target row checks passed (not balanced posting)';
 END $$;
+-- R2: explicit UNIQUE, remaining mutation operations, and catalog-wide RLS.
+DO $$
+DECLARE
+ o uuid := '00000000-0000-4000-8000-000000000001';
+ sale1 uuid := '00000000-0000-4000-8000-000000000013';
+ bad uuid := '00000000-0000-4000-8000-000000000097';
+BEGIN
+ BEGIN INSERT INTO snd.sale_lines(id,owner_id,sale_id,ordinal) VALUES(bad,o,sale1,1);
+  RAISE EXCEPTION 'duplicate sale-line ordinal unexpectedly accepted';
+ EXCEPTION WHEN unique_violation THEN NULL; END;
+ BEGIN DELETE FROM snd.rounding_policy_versions WHERE owner_id=o;
+  RAISE EXCEPTION 'policy deletion unexpectedly accepted';
+ EXCEPTION WHEN SQLSTATE '55000' THEN NULL; END;
+ BEGIN UPDATE snd.rounding_policy_approvals SET approved_at=now() WHERE owner_id=o;
+  RAISE EXCEPTION 'approval update unexpectedly accepted';
+ EXCEPTION WHEN SQLSTATE '55000' THEN NULL; END;
+ -- Catalog check for both enabled BEFORE TRUNCATE triggers; the approval
+ -- trigger is exercised above. Version TRUNCATE is exercised with CASCADE
+ -- only inside this guarded, disposable transaction (FKs otherwise reject first).
+ BEGIN TRUNCATE snd.rounding_policy_versions CASCADE;
+  RAISE EXCEPTION 'registry version truncate unexpectedly accepted';
+ EXCEPTION WHEN SQLSTATE '55000' THEN NULL; END;
+ IF (SELECT count(*) FROM pg_class c JOIN pg_namespace n ON n.oid=c.relnamespace
+     WHERE n.nspname='snd' AND c.relkind='r') <> 46 THEN
+  RAISE EXCEPTION 'unexpected table count'; END IF;
+ IF EXISTS (SELECT 1 FROM pg_class c JOIN pg_namespace n ON n.oid=c.relnamespace
+     WHERE n.nspname='snd' AND c.relkind='r' AND NOT (c.relrowsecurity AND c.relforcerowsecurity)) THEN
+  RAISE EXCEPTION 'missing RLS enable/force'; END IF;
+ IF EXISTS (SELECT 1 FROM pg_policies WHERE schemaname='snd') THEN
+  RAISE EXCEPTION 'unexpected allow policy in default-deny draft'; END IF;
+ IF (SELECT count(*) FROM pg_trigger t JOIN pg_class c ON c.oid=t.tgrelid
+     JOIN pg_namespace n ON n.oid=c.relnamespace WHERE n.nspname='snd'
+     AND c.relname IN ('rounding_policy_versions','rounding_policy_approvals')
+     AND NOT t.tgisinternal AND t.tgenabled='O') <> 4 THEN
+  RAISE EXCEPTION 'unexpected registry trigger inventory'; END IF;
+ RAISE NOTICE 'R2 UNIQUE, registry mutation and catalog-wide RLS checks passed';
+END $$;
 -- Test default deny even with temporary SELECT/INSERT grants, no application auth claim.
 CREATE ROLE snd_probe NOLOGIN;
 GRANT USAGE ON SCHEMA snd TO snd_probe;

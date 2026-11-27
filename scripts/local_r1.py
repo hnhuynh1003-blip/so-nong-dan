@@ -45,18 +45,8 @@ def exact_toolchain(npm):
   record('toolchain-pin','BLOCKED',reason='Expected Node 22.16.0 and npm 10.9.2 for this reproduction; propose/version-review alternatives separately');return False
  record('toolchain-pin','PASS',reason='exact version strings match');return True
 def fallback():
- npm=npm_exe()
- if not npm:record('npm','BLOCKED',reason='npm missing');return
- if not exact_toolchain(npm):return
- tsc=shutil.which('tsc.cmd' if os.name=='nt' else 'tsc')
- if not tsc:record('fallback-tsc','BLOCKED',reason='install exact external TypeScript 5.8.3 or add its bin to PATH');return
- if not run('fallback-ts-version',[tsc,'--version']) or output('fallback-ts-version')!='Version 5.8.3':record('fallback-ts-pin','BLOCKED',reason='Expected TS 5.8.3');return
- run('fallback-ci',[npm,'ci','--offline','--ignore-scripts','--no-audit','--no-fund'])
- run('fallback-typecheck',[npm,'run','typecheck:fallback'])
- run('contract-typecheck',[tsc,'-p','tsconfig.contract-tests.json'])
- run('fallback-build',[npm,'run','build:fallback'])
- run('fallback-tests',[npm,'run','test:fallback'])
- run('schema-static',[sys.executable,'scripts/check_schema_r1.py'])
+ # R2 supersedes the historical PATH compiler runner. No uncontrolled global tsc.
+ record('fallback-runner','BLOCKED',reason='Use scripts/ci_r2.py verify with reviewed committed locks; R1 fallback is historical')
 def react():
  npm=npm_exe(); shell=ROOT/'react-shell'; lock=shell/'package-lock.json'
  steps=('react-ci','react-typecheck','react-production-build','react-browser-install','react-browser-smoke','react-dependency-tree','react-license-inventory','react-audit')
@@ -90,7 +80,12 @@ def react():
   if not run('react-browser-install',['node',cli,'install','chromium'],shell,blocked_codes=True):notrun('react-browser-smoke',reason='browser download failed');return
  else:record('react-browser-install','NOT RUN',reason='use existing Playwright browser or pass --install-browser')
  run('react-browser-smoke',[npm,'run','test:browser'],shell)
- if (shell/'test-results').exists():shutil.copytree(shell/'test-results',OUT/'react-test-results')
+ # Artifact uploader excludes hidden paths. Exclude them at collection too,
+ # before either evidence manifest is generated; do not upload .last-run.json
+ # or unrelated hidden files. The JSON report and PNGs remain evidence.
+ if (shell/'test-results').exists():
+  shutil.copytree(shell/'test-results',OUT/'react-test-results',
+                  ignore=lambda directory,names:[n for n in names if n.startswith('.') or (Path(directory)/n).is_symlink()])
  if (shell/'dist').exists():
   (OUT/'react-dist-sha256.txt').write_text(''.join(f'{hashlib.sha256(p.read_bytes()).hexdigest()}  {p.relative_to(shell).as_posix()}\n' for p in sorted((shell/'dist').rglob('*')) if p.is_file()),encoding='utf-8')
 def postgres():
@@ -110,6 +105,10 @@ def postgres():
   initialized=run('postgres-initdb',[exe('initdb'),'-D',data,'-U','snd_test_admin','--auth=scram-sha-256','--pwfile',pw,'--encoding=UTF8','--no-locale'],env=env)
   pw.unlink(missing_ok=True)
   if not initialized:notrun('postgres-migration','postgres-constraints',reason='disposable initdb failed');return
+  # Use TCP loopback only: never create a Unix socket/lock in a shared
+  # system directory. This configuration is inside our disposable cluster.
+  with (data/'postgresql.conf').open('a',encoding='utf-8') as config:
+   config.write("\nunix_socket_directories = ''\n")
   started=run('postgres-start',[exe('pg_ctl'),'-D',data,'-l',OUT/'postgres-server.log','-o',f'-h 127.0.0.1 -p {port}','-w','-t','30','start'],env=env,timeout=50)
   if not started:notrun('postgres-migration','postgres-constraints',reason='disposable cluster did not start');return
   psql=[exe('psql'),'-X','--no-password','-h','127.0.0.1','-p',str(port),'-U','snd_test_admin','-d','postgres','-v','ON_ERROR_STOP=1']

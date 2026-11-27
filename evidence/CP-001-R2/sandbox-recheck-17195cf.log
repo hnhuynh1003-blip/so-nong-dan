@@ -1,0 +1,131 @@
+Remote candidate SHA: 17195cfe5c0673f4a60d554436325d901942b4a8
+Remote tree verified equal to local staged tree: 35caa5534a99ae43b633c1dd1b59af29a21a5721
+Clean source archive of exact tree; compiler copied from existing sandbox TypeScript package, not npm ci.
+UTC: 2026-11-27T14:48:04Z
+v22.16.0
+10.9.2
+Python 3.13.5
+git version 2.47.3
+Linux 6.18.57 x86_64
+
+$ node node_modules/typescript/lib/tsc.js --version
+Version 5.8.3
+EXIT_CODE=0
+
+$ npm run typecheck:fallback
+
+> so-nong-dan@0.1.1 typecheck:fallback
+> node node_modules/typescript/lib/tsc.js --noEmit
+
+EXIT_CODE=0
+
+$ npm run typecheck:contracts
+
+> so-nong-dan@0.1.1 typecheck:contracts
+> node node_modules/typescript/lib/tsc.js -p tsconfig.contract-tests.json
+
+EXIT_CODE=0
+
+$ npm run build:fallback
+
+> so-nong-dan@0.1.1 build:fallback
+> node scripts/clean-fallback.mjs && node node_modules/typescript/lib/tsc.js && node scripts/build.mjs
+
+EXIT_CODE=0
+
+$ npm run test:fallback
+
+> so-nong-dan@0.1.1 test:fallback
+> npm run build:fallback && node --test tests/*.test.mjs
+
+
+> so-nong-dan@0.1.1 build:fallback
+> node scripts/clean-fallback.mjs && node node_modules/typescript/lib/tsc.js && node scripts/build.mjs
+
+TAP version 13
+# Subtest: six unique module routes
+ok 1 - six unique module routes
+  ---
+  duration_ms: 0.663932
+  type: 'test'
+  ...
+# Subtest: module boundary: can-lua
+ok 2 - module boundary: can-lua
+  ---
+  duration_ms: 0.828359
+  type: 'test'
+  ...
+# Subtest: module boundary: ban-tom-cua
+ok 3 - module boundary: ban-tom-cua
+  ---
+  duration_ms: 0.113371
+  type: 'test'
+  ...
+# Subtest: module boundary: chi-phi
+ok 4 - module boundary: chi-phi
+  ---
+  duration_ms: 0.076826
+  type: 'test'
+  ...
+# Subtest: module boundary: dat
+ok 5 - module boundary: dat
+  ---
+  duration_ms: 0.071518
+  type: 'test'
+  ...
+# Subtest: module boundary: quyet-toan
+ok 6 - module boundary: quyet-toan
+  ---
+  duration_ms: 0.078108
+  type: 'test'
+  ...
+# Subtest: module boundary: nhap-du-lieu
+ok 7 - module boundary: nhap-du-lieu
+  ---
+  duration_ms: 0.102194
+  type: 'test'
+  ...
+# Subtest: home and invalid route
+ok 8 - home and invalid route
+  ---
+  duration_ms: 0.088874
+  type: 'test'
+  ...
+# Subtest: synthetic fixture preserves unknown values and string weight
+ok 9 - synthetic fixture preserves unknown values and string weight
+  ---
+  duration_ms: 6.872947
+  type: 'test'
+  ...
+1..9
+# tests 9
+# suites 0
+# pass 9
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 58.440576
+EXIT_CODE=0
+
+$ python scripts/check_schema_r1.py
+test_decisions_open (__main__.Static.test_decisions_open) ... ok
+test_determinism (__main__.Static.test_determinism) ... ok
+test_fail_closed_declarations (__main__.Static.test_fail_closed_declarations) ... ok
+test_finance_links (__main__.Static.test_finance_links) ... ok
+test_inventory (__main__.Static.test_inventory) ... ok
+test_owner_keys_and_reference_order (__main__.Static.test_owner_keys_and_reference_order) ... ok
+test_policy_registry (__main__.Static.test_policy_registry) ... ok
+test_sale_line_and_allocation_fields (__main__.Static.test_sale_line_and_allocation_fields) ... ok
+
+----------------------------------------------------------------------
+Ran 8 tests in 0.740s
+
+OK
+EXIT_CODE=0
+
+$ python -m py_compile scripts/ci_r2.py
+EXIT_CODE=0
+
+Tracked source byte verification after build:
+144/144 bytes match; changed=[]

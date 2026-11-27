@@ -1,0 +1,67 @@
+=== fallback-lock; exit=1 ===
+npm error code EAI_AGAIN
+npm error syscall getaddrinfo
+npm error errno EAI_AGAIN
+npm error request to https://registry.npmjs.org/typescript failed, reason: getaddrinfo EAI_AGAIN registry.npmjs.org
+npm error A complete log of this run can be found in: /home/oai/.npm/_logs/2026-11-27T14_39_16_303Z-debug-0.log
+
+=== react-lock; exit=1 ===
+npm error code EAI_AGAIN
+npm error syscall getaddrinfo
+npm error errno EAI_AGAIN
+npm error request to https://registry.npmjs.org/@playwright%2ftest failed, reason: getaddrinfo EAI_AGAIN registry.npmjs.org
+npm error A complete log of this run can be found in: /home/oai/.npm/_logs/2026-11-27T14_36_42_961Z-debug-0.log
+
+=== fallback-ci; exit=1 ===
+npm error code EUSAGE
+npm error
+npm error The `npm ci` command can only install with an existing package-lock.json or
+npm error npm-shrinkwrap.json with lockfileVersion >= 1. Run an install with npm@5 or
+npm error later to generate a package-lock.json file, then try again.
+npm error
+npm error Clean install a project
+npm error
+npm error Usage:
+npm error npm ci
+npm error
+npm error Options:
+npm error [--install-strategy <hoisted|nested|shallow|linked>] [--legacy-bundling]
+npm error [--global-style] [--omit <dev|optional|peer> [--omit <dev|optional|peer> ...]]
+npm error [--include <prod|dev|optional|peer> [--include <prod|dev|optional|peer> ...]]
+npm error [--strict-peer-deps] [--foreground-scripts] [--ignore-scripts] [--no-audit]
+npm error [--no-bin-links] [--no-fund] [--dry-run]
+npm error [-w|--workspace <workspace-name> [-w|--workspace <workspace-name> ...]]
+npm error [-ws|--workspaces] [--include-workspace-root] [--install-links]
+npm error
+npm error aliases: clean-install, ic, install-clean, isntall-clean
+npm error
+npm error Run "npm help ci" for more info
+npm error A complete log of this run can be found in: /home/oai/.npm/_logs/2026-11-27T14_39_43_804Z-debug-0.log
+
+=== react-audit; exit=1 ===
+npm error code ENOLOCK
+npm error audit This command requires an existing lockfile.
+npm error audit Try creating one first with: npm i --package-lock-only
+npm error audit Original error: loadVirtual requires existing shrinkwrap file
+{
+  "error": {
+    "code": "ENOLOCK",
+    "summary": "This command requires an existing lockfile.",
+    "detail": "Try creating one first with: npm i --package-lock-only\nOriginal error: loadVirtual requires existing shrinkwrap file"
+  }
+}
+npm error A complete log of this run can be found in: /home/oai/.npm/_logs/2026-11-27T14_39_44_046Z-debug-0.log
+
+=== pg-bindir; exit=0 ===
+/usr/lib/postgresql/17/bin
+PostgreSQL 17.11 (Debian 17.11-0+deb13u1)
+
+=== postgres-runner; exit=1 ===
+postgres-preflight: BLOCKED (None) missing local initdb executable
+postgres-migration: NOT RUN (None) no local toolchain
+postgres-constraints: NOT RUN (None) no local toolchain
+Evidence: /mnt/data/snd-r2/repo/evidence/local-r1-postgres-20261127T143943567421Z
+
+=== workflow-yaml; exit=0 ===
+YAML parse and static policy assertions PASS; not GitHub Actions execution
+

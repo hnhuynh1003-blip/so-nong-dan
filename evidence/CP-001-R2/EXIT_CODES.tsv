@@ -1,0 +1,26 @@
+phase	step	exit_code	status
+clean_archive_17195cf	local_compiler_version	0	PASS
+clean_archive_17195cf	fallback_typecheck	0	PASS
+clean_archive_17195cf	contract_typecheck	0	PASS
+clean_archive_17195cf	fallback_build	0	PASS
+clean_archive_17195cf	fallback_node_smoke	0	PASS_9_OF_9
+clean_archive_17195cf	static_schema	0	PASS_8_OF_8
+clean_archive_17195cf	ci_python_syntax	0	PASS
+clean_archive_17195cf	tracked_bytes_after_build	0	PASS_144_OF_144
+prior_r2_sandbox	fallback_lock_resolution	1	BLOCKED_EAI_AGAIN
+prior_r2_sandbox	react_lock_resolution	1	BLOCKED_EAI_AGAIN
+prior_r2_sandbox	fallback_npm_ci	1	BLOCKED_EUSAGE
+prior_r2_sandbox	react_npm_audit	1	BLOCKED_ENOLOCK
+prior_r2_sandbox	postgres_runner	1	BLOCKED_MISSING_INITDB
+prior_r2_sandbox	workflow_yaml_static	0	PASS_STATIC_ONLY
+continuation_edit	python_and_shell_syntax	0	PASS
+continuation_edit	fallback_typecheck	0	PASS
+continuation_edit	contract_typecheck	0	PASS
+continuation_edit	fallback_node_smoke	0	PASS_9_OF_9
+continuation_edit	static_schema	0	PASS_8_OF_8
+ci	bootstrap		NOT_RUN_QUOTA_UNCONFIRMED
+ci	verify		NOT_RUN_QUOTA_UNCONFIRMED
+ci	react_production		NOT_RUN
+ci	browser_screenshots		NOT_RUN
+ci	postgres_migration_constraints		NOT_RUN
+ci	license_security		NOT_RUN

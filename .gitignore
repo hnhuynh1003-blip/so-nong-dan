@@ -12,3 +12,4 @@ __pycache__/
 react-shell/playwright-report/
 react-shell/test-results/
 evidence/local-r1-*/
+evidence/local-r2-*/
