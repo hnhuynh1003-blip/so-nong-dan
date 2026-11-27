@@ -1,0 +1,24 @@
+# CP-001-R2 — failed verify run receipt and remediation
+
+Status: PARTIAL; original run remains FAILED. No CP-002 or acceptance.
+
+## Provenance and preservation
+
+- Run [46022965503](https://github.com/hnhuynh1003-blip/so-nong-dan/actions/runs/46022965503), attempt 1, completed/failure, exact tested HEAD `8fbda9d2172b4a1e78e5113439082fe592b7b88a`, PR #1. Job 140587013407 (verification): technical gate failure, artifact upload success.
+- Artifact 15208677507, `cp001-r2-verify-8fbda9d2172b4a1e78e5113439082fe592b7b88a-46022965503-1`, downloaded using GitHub connector. Original 271797 bytes preserved as `CP001_R2_VERIFY_46022965503_FAILED.zip` without modification or repackaging. SHA-256 `62c9d82bd8eb67c2724062c7529765c9a1fcb62dd2889e0c4ae9aefd9dd066a7` matches GitHub metadata; ZIP CRC check passed. Raw command logs, status tables, JSON reports, source and evidence manifests, PNGs remain in the archive as received. Do not reconstruct the missing hidden file or edit historical manifests.
+- Complete GitHub job console log as returned by the connector (decoded text re-encoded as UTF-8, not a raw HTTP archive): `VERIFY_46022965503_JOB_140587013407.log`, 22203 bytes, SHA-256 `7e614318bece729f2e0bd16afb641029b5f06e7f76b4a231ee719437fdaac7c8`, Git blob `b95741c2d27708bf773dae331971f16c06f8355b`. Exact string readback matched; credentials in console are masked. Checked for obvious unmasked credential markers, not a comprehensive secret audit.
+- Exact parent local tree matched GitHub tree `8dee845d72816330fd95317daab003779efa4a61`. Parent source manifest 152/152 checked; archived CI SOURCE_SHA256 153/153 matched parent Git objects. Archive contains 54 files including its outer manifest; 53/54 listed hashes match, missing `react-detail/react-test-results/.last-run.json`, no other missing/extra/hash mismatches. Nested React manifest 17/18 (same missing path); PostgreSQL manifest 9/9. Desktop/mobile PNG signatures present. This is historical evidence, not evidence for the patched HEAD.
+
+## Original actual exit codes and findings
+
+Ubuntu 24.04 image 20261122.23.1; Python 3.12.3, Node 22.16.0, npm 10.9.2, TypeScript 5.8.3. Fallback and React clean npm ci, fallback typecheck/build, contract typecheck, Node smoke 9/9, schema-static 8/8, React typecheck/production build, Chromium install, 4/4 production smoke, dependency trees, both license inventories and both npm audits: exit 0. Both audits reported 0 vulnerabilities at run time (not a permanent security guarantee); metadata license inventories not legal clearance. Source drift check PASS. See original outer/nested `exit-codes.tsv` and `results.json` for exact commands/status. Desktop/mobile PNG files in React detail.
+
+PostgreSQL 16.16 initdb exit 0. `postgres-start` exit 1: server listened on 127.0.0.1 but FATAL `could not create lock file "/var/run/postgresql/.s.PGSQL.52015.lock": Permission denied`. Cluster identity, migration and SQL constraints were not executed; stop NOT RUN (no postmaster.pid), cleanup PASS. Outer postgres runner exit 1; workflow gate exit 1. No runtime constraint or RLS claim.
+
+## Minimal remediation
+
+- Append `unix_socket_directories = ''` to only the freshly initialized disposable `data/postgresql.conf` before starting it. Existing explicit TCP loopback host/ephemeral port, SCRAM initdb authentication and random temporary password, inherited PG* environment removal, `SHOW data_directory` gate, `ON_ERROR_STOP`, stop/cleanup behavior unchanged. No system directory, permission or service change. No migration/test SQL change.
+- Copy only visible non-symlink entries from Playwright test-results before hashing. Exclude all dot-prefixed entries (including `.last-run.json` and hidden directories); keep the JSON report and PNG evidence. Explicit `include-hidden-files: false` on pinned upload action. Both manifests now describe the collected files rather than Playwright private state. Original failed archive retains the historical mismatch. Exact new uploaded artifact/manifest match still requires a real authorized run.
+- Add `scripts/check_runner_r2.py`, invoked as independent verify gate. Three regression tests run actual runner Python logic against synthetic temporary files and mocked subprocess/socket calls: visible report/screenshots retained, hidden files and symlinks excluded, collected hashes match; TCP-only setting/SCRAM/loopback/env/identity/cleanup control flow; mismatched identity prevents any SQL. These do not run a real database, browser or npm. Local regression 3/3 exit 0; Python syntax exit 0; existing static schema 8/8 exit 0. See `remediation-local-46022965503.log`. Sandbox lacks PostgreSQL server binaries; new runtime and CI not run. Both locks and all SQL remain byte-identical.
+
+No verify label applied, no workflow dispatch/rerun, no merge, no Codex. Owner may remove and re-add the existing verify label after independent review of the new HEAD. D08–D12 OPEN, CP-002 NOT STARTED.

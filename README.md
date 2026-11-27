@@ -4,7 +4,7 @@
 
 ## CI và kiểm thử local
 
-CP-001-R2: PARTIAL. Owner đã cấp quyền chạy CI trong hạn mức miễn phí hiện có. Bootstrap do chủ dự án kích hoạt đã SUCCESS (run 46021693007); hai lockfile thật được lưu nguyên byte. Không tự kích hoạt verify; cần Independent Verifier kiểm tra HEAD mới và owner cấp quyền theo runbook. Xem `docs/15_CI_R2.md` và `checkpoints/CP-001-R2_REPORT.md`.
+CP-001-R2: PARTIAL. Owner đã cấp quyền chạy CI trong hạn mức miễn phí hiện có. Bootstrap do chủ dự án kích hoạt đã SUCCESS (run 46021693007); hai lockfile thật được lưu nguyên byte. Verify run 46022965503 do owner kích hoạt đã FAIL ở bước khởi động PostgreSQL; đã chuẩn bị bản vá socket/evidence, chưa chạy lại CI. Cần Independent Verifier kiểm tra HEAD mới trước khi owner cấp quyền theo runbook. Xem `docs/15_CI_R2.md` và `checkpoints/CP-001-R2_REPORT.md`.
 
 Dùng Node 22.16.0 / npm 10.9.2, Python 3.13.x; TypeScript 5.8.3 được pin trong từng package, không cài compiler global. Từ bản clone sạch, sau khi được phép tải dependency công khai:
 
@@ -24,6 +24,6 @@ Linux: `python3` thay `py -3.13`. PostgreSQL cần `pg_config` trên PATH trỏ 
 - `migrations/0001_schema_draft.sql`: revised unexecuted draft (không phải live upgrade), generator `scripts/draft_schema.py`, static test `scripts/check_schema_r1.py`, disposable SQL smoke `tests/postgres_disposable.sql`. Không seed policy hoặc phê duyệt nghiệp vụ.
 - `checkpoints/CP-001_REPORT.md`, `evidence/CP-001/`: immutable historical snapshot; manifest cũ kiểm tra trên baseline v0.1.0, không phải R1 tree.
 - `checkpoints/CP-001-R1_REPORT.md`, `evidence/CP-001-R1/`: báo cáo, log mới, manifest source và tree. Git bundle lịch sử lưu commit baseline và R1. Hai branch và tag đã có trên GitHub, không merge.
-- `evidence/CP-001-R2/`: báo cáo kiểm tra sandbox, exit codes và manifest riêng; bootstrap artifact nguyên bản và receipt; verify evidence chưa có.
+- `evidence/CP-001-R2/`: báo cáo kiểm tra sandbox, exit codes và manifest riêng; bootstrap và failed verify artifact nguyên bản, log console, receipt và local remediation regression logs.
 
 Không secret/dữ liệu tài chính thật, không deploy, D08–D12 OPEN. Chủ dự án mới có quyền ACCEPTED; Independent Verifier kiểm tra bằng chứng.

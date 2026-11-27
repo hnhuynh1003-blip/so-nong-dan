@@ -174,6 +174,7 @@ try:
             bootstrap('react', ROOT / 'react-shell')
     else:
         run('schema-static', [sys.executable, 'scripts/check_schema_r1.py'])
+        run('runner-regression', [sys.executable, 'scripts/check_runner_r2.py'])
         if toolchain():
             fallback()
             if verify_package('react', ROOT / 'react-shell'):

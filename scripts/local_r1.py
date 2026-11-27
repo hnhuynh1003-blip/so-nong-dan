@@ -80,7 +80,12 @@ def react():
   if not run('react-browser-install',['node',cli,'install','chromium'],shell,blocked_codes=True):notrun('react-browser-smoke',reason='browser download failed');return
  else:record('react-browser-install','NOT RUN',reason='use existing Playwright browser or pass --install-browser')
  run('react-browser-smoke',[npm,'run','test:browser'],shell)
- if (shell/'test-results').exists():shutil.copytree(shell/'test-results',OUT/'react-test-results')
+ # Artifact uploader excludes hidden paths. Exclude them at collection too,
+ # before either evidence manifest is generated; do not upload .last-run.json
+ # or unrelated hidden files. The JSON report and PNGs remain evidence.
+ if (shell/'test-results').exists():
+  shutil.copytree(shell/'test-results',OUT/'react-test-results',
+                  ignore=lambda directory,names:[n for n in names if n.startswith('.') or (Path(directory)/n).is_symlink()])
  if (shell/'dist').exists():
   (OUT/'react-dist-sha256.txt').write_text(''.join(f'{hashlib.sha256(p.read_bytes()).hexdigest()}  {p.relative_to(shell).as_posix()}\n' for p in sorted((shell/'dist').rglob('*')) if p.is_file()),encoding='utf-8')
 def postgres():
@@ -100,6 +105,10 @@ def postgres():
   initialized=run('postgres-initdb',[exe('initdb'),'-D',data,'-U','snd_test_admin','--auth=scram-sha-256','--pwfile',pw,'--encoding=UTF8','--no-locale'],env=env)
   pw.unlink(missing_ok=True)
   if not initialized:notrun('postgres-migration','postgres-constraints',reason='disposable initdb failed');return
+  # Use TCP loopback only: never create a Unix socket/lock in a shared
+  # system directory. This configuration is inside our disposable cluster.
+  with (data/'postgresql.conf').open('a',encoding='utf-8') as config:
+   config.write("\nunix_socket_directories = ''\n")
   started=run('postgres-start',[exe('pg_ctl'),'-D',data,'-l',OUT/'postgres-server.log','-o',f'-h 127.0.0.1 -p {port}','-w','-t','30','start'],env=env,timeout=50)
   if not started:notrun('postgres-migration','postgres-constraints',reason='disposable cluster did not start');return
   psql=[exe('psql'),'-X','--no-password','-h','127.0.0.1','-p',str(port),'-U','snd_test_admin','-d','postgres','-v','ON_ERROR_STOP=1']

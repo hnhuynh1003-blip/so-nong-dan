@@ -40,4 +40,5 @@ jobs:
           name: cp001-r2-${{ env.SND_MODE }}-${{ github.event.pull_request.head.sha }}-${{ github.run_id }}-${{ github.run_attempt }}
           path: evidence/local-r2-*/
           retention-days: 7
+          include-hidden-files: false
           if-no-files-found: error
