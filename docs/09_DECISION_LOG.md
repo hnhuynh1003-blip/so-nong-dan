@@ -1,6 +1,6 @@
 # 09 — Decision log
 
-Giữ D01–D12 đúng baseline, không tự đóng OPEN.
+Bảng D01–D12 bên dưới là snapshot lịch sử CP-001, giữ nguyên để kiểm chứng baseline. Trạng thái hiện hành xem E15 cuối tài liệu: D06 CONFIRMED; D08.1–D08.6 CONFIRMED; D09–D12 OPEN; D05/D07 PROPOSED.
 
 | ID | Trạng thái | Nội dung |
 |---|---|---|
@@ -32,3 +32,21 @@ E13 (2026-11-27, execution record): Owner changed repository visibility to Publi
 ## Owner acceptance decision (2026-11-27)
 
 E14 — OWNER CONFIRMED (checkpoint acceptance and next-stage scope only): Project Owner officially accepts CP-001-R2, hence CP-001 ACCEPTED, on 2026-11-27. Accepted closure HEAD `5f44141824814877cbd5121b13b73f0cf493174d`; verified runtime HEAD `05724c20f51755bc94a948165afb36b892e35fb4`. CP-002: SPECIFICATION AUTHORIZED, IMPLEMENTATION NOT AUTHORIZED. This authorization is not a decision on any open business rule, proposed stack, production deployment or full product acceptance. D08–D12 remain OPEN, D01–D07 unchanged. No merge, unnecessary CI, Codex or CP-002 implementation. Decision recorded in `checkpoints/CP-001-R2_OWNER_ACCEPTANCE.md`. Earlier execution decisions and historical records remain unchanged.
+
+## E15 — Owner authorization and current decision override (2026-11-28)
+
+OWNER CONFIRMED: current instruction **SND — CP-002A IMPLEMENTATION ORDER** authorizes implementation of A-P1 only on separate branch descended from `3ae5e2be06e401adaca044aad6f9376e9b15e5c5`. CP-001 remains ACCEPTED. This overrides E14 only for A implementation; no B–F authorization. Preserve historical rows above and original source specifications; see `docs/cp002/CP-002A_AUTHORIZATION.md` for precise source hashes, R1 precedence and provenance.
+
+| Current decision | Status | Scope |
+|---|---|---|
+| D06 | CONFIRMED | Balanced ledger architecture; no specific posting policy approval. |
+| D08.1 | CONFIRMED | Exact proportional tare, partial bag groups, whole sheet, applicable entered ratio. |
+| D08.2 | CONFIRMED | Only tare in current rice workflow. |
+| D08.3 | CONFIRMED | Nearest whole kg, positive half upward. |
+| D08.4 | CONFIRMED | One price per sheet; whole-sheet rounding; group sums without re-rounding. |
+| D08.5 | CONFIRMED | Retain exact calculated amount; settlement later and separate. R1 §1 supersedes UNKNOWN/D08.5-A; no implicit rounding, waiver, discount, write-off or integer coercion. Fractional posting representation remains gated. |
+| D08.6 | CONFIRMED | Historical rule/approval/build for corrections; explicit separate approved rule change; no invented unknown rules. |
+| D09–D12 | OPEN | Unchanged. |
+| D05/D07 | PROPOSED | Unchanged. |
+
+The A-P1 library is pure technical arithmetic; confirmation of business decisions is not registry activation, financial policy approval or implementation of B–F. CP-002A CANDIDATE FOR INDEPENDENT VERIFICATION, not ACCEPTED; A01–A12 NOT RUN. No CI dispatch, merge, Codex, deployment or charges. Original R&D references are preserved in supplied specs; no claim of independently archived original Chat reports.
