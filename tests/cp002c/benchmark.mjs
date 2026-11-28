@@ -1,0 +1,32 @@
+/** Each process runs one synthetic size/phase. Peak RSS includes setup and assertions, not production SLA. */
+import assert from 'node:assert/strict';import {createHash} from 'node:crypto';import {performance} from 'node:perf_hooks';import {pathToFileURL} from 'node:url';import {join} from 'node:path';
+import {setOf,input,request,q,T1,trustedFixture,referenceDigest} from './fixture.mjs';
+const build=process.env.SND_C_BUILD;if(!build)throw Error('Use verification runner');const C=await import(pathToFileURL(join(build,'modules/policy/cp1/index.js')));assert.equal(C.engineAvailable(),true);
+const n=Number(process.argv[2]),phase=process.argv[3]??'create';if(![1000,10000,100000].includes(n)||!['create','create-frozen','digest','replay','reference'].includes(phase))throw Error('Explicit supported size and phase required');if(n===100000&&['digest','replay'].includes(phase))throw Error('100k cannot fit current envelope; use reference');
+const source=input({owner:'synthetic',sid:'benchmark',raws:Array(n).fill('443'),ratio:q(10),price:'7350',mode:'three-digit'}),set=setOf(C,{owner:'synthetic'}),context=trustedFixture(set,T1);
+const oldDigest={1000:'7c472b000c6b233d0c3b9b34c3d2df55d28f3e68c789cc57dd1f2ca95e67a145',10000:'83a250670bb2c6c5ed9aa244450949509e6cad860e10cc697fbf6ea1c6015d14',100000:'295507e3f6276d423c967f45531731e55495e51dbc79830d39e64da7fab28f31'}[n];
+function verifyB(r){const g=44300n*BigInt(n),t=100n*BigInt(n),p=g-t,s=(p+500n)/1000n*1000n,a=s/1000n*7350n;assert.equal(r.count,String(n));for(const [k,v] of Object.entries({grossGram:g,tareGram:t,physicalNetGram:p,commercialNetGram:p,settlementGram:s,residualGram:s-p,amountVnd:a}))assert.deepEqual(r[k],q(v));const digest=createHash('sha256').update(JSON.stringify(r)).digest('hex');assert.equal(digest,oldDigest);return digest;}
+function count(v){if(v===null||typeof v!=='object')return 1;if(Array.isArray(v))return 1+v.reduce((a,x)=>a+count(x),0);let n=1;for(const k of Object.keys(v))n+=1+count(v[k]);return n;}
+function component(v,domain){const rawBytes=Buffer.byteLength(JSON.stringify(v)),nodes=count(v);const start=performance.now();try{const m=C.canonicalDigest(v,'snapshot',domain);assert.equal(m.bytes,rawBytes);assert.equal(m.nodes,nodes);return {...m,digestMs:performance.now()-start,status:'PASS'};}catch(e){if(e.code!=='RESOURCE_LIMIT')throw e;return {rawJsonBytes:rawBytes,nodes,digestMs:performance.now()-start,status:'RESOURCE_LIMIT',sha256:null,bytes:null};}}
+function freeze(v){if(v!==null&&typeof v==='object'){for(const x of Object.values(v))freeze(x);Object.freeze(v);}return v;}
+// Own-key order and property attributes, not just numeric equality. No mutation of caller objects.
+function attributes(v){const h=createHash('sha256');function walk(x){if(x===null||typeof x!=='object')return;h.update(`${Array.isArray(x)?'a':'o'}:${Object.isFrozen(x)}:${Object.isSealed(x)}:${Object.isExtensible(x)}\0`);for(const k of Reflect.ownKeys(x)){const d=Object.getOwnPropertyDescriptor(x,k);assert.ok('value' in d);h.update(JSON.stringify([k,d.enumerable,d.writable,d.configurable])+'\0');walk(d.value);}}walk(v);return h.digest('hex');}
+if(phase==='create-frozen'){freeze(source);freeze(set);freeze(context);}
+const all=[source,set,context],before=JSON.stringify(all),attributesBefore=attributes(all),beforeHash=createHash('sha256').update(before).digest('hex');
+let snapshot=null,result=null,metrics=null,rejection=null,bd=null,digestMs=null,replayMs=null,createMs=null;
+let phaseStart,phaseEnd,elapsed,peakAtEnd;
+function begin(){phaseStart=process.memoryUsage().rss;return performance.now();}
+function end(t){elapsed=performance.now()-t;phaseEnd=process.memoryUsage().rss;peakAtEnd=process.resourceUsage().maxRSS;}
+function create(){return C.createSnapshot(set,request(source),context);}
+if(phase==='create'||phase==='create-frozen'){
+ const t=begin();try{snapshot=create();}catch(e){if(e.code!=='RESOURCE_LIMIT')throw e;rejection={code:e.code,message:e.message};}end(t);createMs=elapsed;
+ if(n===100000){assert.ok(rejection);assert.equal(snapshot,null);}else{assert.ok(snapshot);assert.equal(rejection,null);}
+}else if(phase==='reference'){
+ const B=await import(pathToFileURL(join(build,'modules/rice/calculation/index.js')));const t=begin();result=B.previewRiceSheetBP1(source);end(t);bd=verifyB(result);
+}else{
+ snapshot=create();const {snapshotSha256,...body}=snapshot;const trustedDigest=referenceDigest(body,'snapshot');assert.equal(snapshotSha256,trustedDigest);
+ const t=begin();if(phase==='digest'){metrics=C.snapshotBodyDigest(body);assert.equal(metrics.sha256,trustedDigest);}else{const replay=C.replaySnapshot(snapshot,set,trustedDigest,context);assert.equal(replay.status,'VERIFIED');}end(t);if(phase==='digest')digestMs=elapsed;else replayMs=elapsed;
+}
+assert.equal(JSON.stringify(all),before);assert.equal(attributes(all),attributesBefore);assert.equal(createHash('sha256').update(JSON.stringify(all)).digest('hex'),beforeHash);
+let full=null,im=null,rm=null;if(snapshot){bd=verifyB(snapshot.result);full=C.canonicalDigest(snapshot,'snapshot','definition');assert.equal(full.bytes,Buffer.byteLength(JSON.stringify(snapshot)));assert.equal(full.nodes,count(snapshot));}else if(result){im=component(source,'input');rm=component(result,'result');if(n===100000)assert.ok(im.nodes+rm.nodes>C.C_LIMITS.nodes||((im.bytes??im.rawJsonBytes)+(rm.bytes??rm.rawJsonBytes)>C.C_LIMITS.snapshotBytes));}
+console.log(JSON.stringify({bags:n,phase,status:rejection?'RESOURCE_LIMIT':'PASS',rejection,createMs,digestMs,replayMs,elapsedMs:elapsed,canonicalBytes:full?.bytes??null,nodes:full?.nodes??null,snapshotSha256:snapshot?.snapshotSha256??null,inputSha256:snapshot?.inputSha256??null,resultSha256:snapshot?.resultSha256??null,acceptedBOutputDigest:bd,amountVnd:(snapshot?.result??result)?.amountVnd??null,sourceJsonBytes:Buffer.byteLength(JSON.stringify(source)),sourceNodes:count(source),input:im,result:rm,minimumCombinedNodes:im&&rm?im.nodes+rm.nodes:null,minimumCombinedJsonBytes:im&&rm?(im.bytes??im.rawJsonBytes)+(rm.bytes??rm.rawJsonBytes):null,rssBeforeBytes:phaseStart,rssAfterBytes:phaseEnd,peakRssAtPhaseEndKiB:peakAtEnd,peakRssKiB:process.resourceUsage().maxRSS,nonMutation:{bytesEqual:true,ownKeyOrderAndDescriptorsEqual:true,beforeSha256:beforeHash,sourceFrozen:Object.isFrozen(source),noPartialSnapshot:rejection?snapshot===null:null},runtime:process.version,platform:process.platform,arch:process.arch}));
