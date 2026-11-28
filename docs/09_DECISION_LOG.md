@@ -1,6 +1,6 @@
 # 09 — Decision log
 
-Bảng D01–D12 bên dưới là snapshot lịch sử CP-001, giữ nguyên để kiểm chứng baseline. Trạng thái hiện hành xem E15 cuối tài liệu: D06 CONFIRMED; D08.1–D08.6 CONFIRMED; D09–D12 OPEN; D05/D07 PROPOSED.
+Bảng D01–D12 bên dưới là snapshot lịch sử CP-001, giữ nguyên để kiểm chứng baseline. Trạng thái hiện hành xem E15 (quyết định nghiệp vụ) và E16 (nghiệm thu): D06 CONFIRMED; D08.1–D08.6 CONFIRMED; D09–D12 OPEN; D05/D07 PROPOSED.
 
 | ID | Trạng thái | Nội dung |
 |---|---|---|
@@ -50,3 +50,7 @@ OWNER CONFIRMED: current instruction **SND — CP-002A IMPLEMENTATION ORDER** au
 | D05/D07 | PROPOSED | Unchanged. |
 
 The A-P1 library is pure technical arithmetic; confirmation of business decisions is not registry activation, financial policy approval or implementation of B–F. CP-002A CANDIDATE FOR INDEPENDENT VERIFICATION, not ACCEPTED; A01–A12 NOT RUN. No CI dispatch, merge, Codex, deployment or charges. Original R&D references are preserved in supplied specs; no claim of independently archived original Chat reports.
+
+## E16 — OWNER CONFIRMED: CP-002A acceptance (2026-11-28)
+
+Project Owner explicitly accepts CP-002A within independently verified isolated A-P1 arithmetic and all disclosed limitations. Accepted runtime HEAD `80fb95175e902e6bea3caac518a8a6b25b9c1815`; tree `1bcb9ca31eebed744b3448c4c6387d9c50935405`. Source: “SND — CP-002A OWNER ACCEPTANCE & EVIDENCE CLOSURE” instruction and subsequent original ZIP attachment; see `checkpoints/CP-002A_OWNER_ACCEPTANCE.md` and `evidence/CP-002A/INDEPENDENT_VERIFICATION_80fb9517.md`. CP-001 ACCEPTED; CP-002A ACCEPTED; CP-002B–F NOT AUTHORIZED. E15 business decision overrides unchanged (D06 and D08.1–D08.6 CONFIRMED; D09–D12 OPEN; D05/D07 PROPOSED). Earlier candidate status is historical. Clean npm ci NOT RUN; independent full-checkout replay BLOCKED by DNS. Full baseline smoke, full project typecheck and contract typecheck were Engineering-reported, not independently rerun. PostgreSQL round-trip NOT RUN (AR10 pure pre-cast only). Raw JSON parsing, duplicate-key/depth/envelope checks and hostile objects are outside A-P1. Integration and A01–A12 product acceptance NOT RUN. Temporary 1024-digit guard unreachable with valid current operands; no runtime coverage of that branch. Synthetic benchmark is not production capacity/SLA or a historical-data limit. No policy activation, financial posting, production security claim or B–F implementation. No further implementation, new tests, CI, merge, deployment, Codex or charges. Return to Master Control.

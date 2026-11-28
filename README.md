@@ -1,6 +1,6 @@
-# SỔ NÔNG DÂN — CP-002A candidate (CP-001 accepted baseline)
+# SỔ NÔNG DÂN — CP-002A accepted (isolated A-P1)
 
-**CP-001: ACCEPTED — Owner Acceptance ngày 27/11/2026; chỉ dữ liệu giả lập.** Tiếp tục trực tiếp CP-001 v0.1.0, giữ baseline/evidence cũ, không khởi tạo dự án mới. GitHub (Public theo quyết định chủ dự án) là nguồn kỹ thuật chung; không backend, không phải app offline/PWA hoàn chỉnh. CP-002A: IMPLEMENTATION AUTHORIZED, CANDIDATE FOR INDEPENDENT VERIFICATION. CP-002B–F NOT AUTHORIZED.
+**CP-001: ACCEPTED — Owner Acceptance ngày 27/11/2026; chỉ dữ liệu giả lập.** Tiếp tục trực tiếp CP-001 v0.1.0, giữ baseline/evidence cũ, không khởi tạo dự án mới. GitHub (Public theo quyết định chủ dự án) là nguồn kỹ thuật chung; không backend, không phải app offline/PWA hoàn chỉnh. CP-002A: ACCEPTED by Project Owner (isolated A-P1 only). CP-002B–F NOT AUTHORIZED.
 
 ## CI và kiểm thử local
 
@@ -26,10 +26,16 @@ Linux: `python3` thay `py -3.13`. PostgreSQL cần `pg_config` trên PATH trỏ 
 - `checkpoints/CP-001-R1_REPORT.md`, `evidence/CP-001-R1/`: báo cáo, log mới, manifest source và tree. Git bundle lịch sử lưu commit baseline và R1. Hai branch và tag đã có trên GitHub, không merge.
 - `evidence/CP-001-R2/`: báo cáo kiểm tra sandbox, exit codes và manifest riêng; bootstrap, failed verify và successful verify artifacts nguyên bản, log console, receipt và local remediation regression logs.
 
-Không secret/dữ liệu tài chính thật, không deploy, D08–D12 OPEN. Chủ dự án mới có quyền ACCEPTED; Independent Verifier kiểm tra bằng chứng.
+Không secret/dữ liệu tài chính thật, không deploy; D06 và D08.1–D08.6 CONFIRMED, D09–D12 OPEN (E15). Chủ dự án mới có quyền ACCEPTED; Independent Verifier kiểm tra bằng chứng.
 
 Biên bản chính thức: [`CP-001-R2_OWNER_ACCEPTANCE.md`](checkpoints/CP-001-R2_OWNER_ACCEPTANCE.md). CP-001 ACCEPTED. E14 above is the historical CP-001 acceptance record; see E15 for current A-only authorization. A01–A12 product acceptance vẫn NOT RUN.
 
-## CP-002A / A-P1 — CANDIDATE FOR INDEPENDENT VERIFICATION
+## CP-002A / A-P1 — ACCEPTED
 
-Parent `3ae5e2be06e401adaca044aad6f9376e9b15e5c5`; separate candidate branch `checkpoint/cp-002a`. Owner authorizes A only; D06, D08.1–D08.6 CONFIRMED, D09–D12 OPEN. Original draft and R1 addendum preserved in `docs/cp002/`; R1 §8 controls A-P1. Pure BigInt arithmetic under `src/modules/shared/exact-arithmetic/`, no integration. Reproduce local verification with exact package-local compiler: `python3 scripts/verify_cp002a.py --evidence-dir /tmp/snd-cp002a-independent --operations 100000`. See `checkpoints/CP-002A_REPORT.md`, `docs/cp002/CP-002A_A-P1_CONTRACT.md`, `docs/cp002/CP-002_TEST_REGISTER.md` (all 64 IDs), and `evidence/CP-002A/`. CP-001 CI/runbook above is historical; no CP-002A remote CI authorized or dispatched. No merge, deploy, B–F implementation, policy activation, real data or owner acceptance. The accepted CP-001-R2 manifest is historical; new aggregate manifest is `evidence/CP-002A/SHA256SUMS.txt`.
+Parent `3ae5e2be06e401adaca044aad6f9376e9b15e5c5`; separate candidate branch `checkpoint/cp-002a`. Owner authorizes A only; D06, D08.1–D08.6 CONFIRMED, D09–D12 OPEN. Original draft and R1 addendum preserved in `docs/cp002/`; R1 §8 controls A-P1. Pure BigInt arithmetic under `src/modules/shared/exact-arithmetic/`, no integration. Reproduce local verification with exact package-local compiler: `python3 scripts/verify_cp002a.py --evidence-dir /tmp/snd-cp002a-independent --operations 100000`. See `checkpoints/CP-002A_REPORT.md`, `docs/cp002/CP-002A_A-P1_CONTRACT.md`, `docs/cp002/CP-002_TEST_REGISTER.md` (all 64 IDs), and `evidence/CP-002A/`. CP-001 CI/runbook above is historical; no CP-002A remote CI authorized or dispatched. No merge, deploy, B–F implementation, policy activation or real data. The accepted CP-001-R2 manifest is historical; new aggregate manifest is `evidence/CP-002A/SHA256SUMS.txt`.
+
+Owner Acceptance (2026-11-28): accepted runtime HEAD `80fb95175e902e6bea3caac518a8a6b25b9c1815`, tree `1bcb9ca31eebed744b3448c4c6387d9c50935405`. Independent Verifier: 12,135/12,135 vector matches, 7/7 arithmetic groups PASS, 100,000 benchmark operations PASS, 3/3 benchmark digests MATCH. Original independent ZIP and its 18/18 internal checksums verified by closure assistant; no tests rerun. See [Owner Acceptance](checkpoints/CP-002A_OWNER_ACCEPTANCE.md) and [Independent Verification](evidence/CP-002A/INDEPENDENT_VERIFICATION_80fb9517.md).
+
+Clean npm ci NOT RUN; independent full-checkout replay BLOCKED by DNS. Full baseline smoke, full project typecheck and contract typecheck were Engineering-reported, not independently rerun. PostgreSQL round-trip NOT RUN (AR10 pure pre-cast only). Raw JSON parsing, duplicate-key/depth/envelope checks and hostile objects are outside A-P1. Integration and A01–A12 product acceptance NOT RUN. Temporary 1024-digit guard unreachable with valid current operands; no runtime coverage of that branch. Synthetic benchmark is not production capacity/SLA or a historical-data limit. No policy activation, financial posting, production security claim or B–F implementation.
+
+CP-001 ACCEPTED; CP-002A ACCEPTED (A-P1 only); CP-002B–F NOT AUTHORIZED. E15 remains the source for D06/D08.1–6 CONFIRMED and D09–D12 OPEN; E16 records acceptance only. No new CI, code or policy activation.
