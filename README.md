@@ -1,6 +1,6 @@
-# SỔ NÔNG DÂN — CP-002A accepted (isolated A-P1)
+# SỔ NÔNG DÂN — CP-002B candidate (CP-001 and CP-002A accepted)
 
-**CP-001: ACCEPTED — Owner Acceptance ngày 27/11/2026; chỉ dữ liệu giả lập.** Tiếp tục trực tiếp CP-001 v0.1.0, giữ baseline/evidence cũ, không khởi tạo dự án mới. GitHub (Public theo quyết định chủ dự án) là nguồn kỹ thuật chung; không backend, không phải app offline/PWA hoàn chỉnh. CP-002A: ACCEPTED by Project Owner (isolated A-P1 only). CP-002B–F NOT AUTHORIZED.
+**CP-001: ACCEPTED — Owner Acceptance ngày 27/11/2026; chỉ dữ liệu giả lập.** Tiếp tục trực tiếp CP-001 v0.1.0, giữ baseline/evidence cũ, không khởi tạo dự án mới. GitHub (Public theo quyết định chủ dự án) là nguồn kỹ thuật chung; không backend, không phải app offline/PWA hoàn chỉnh. CP-002A: ACCEPTED by Project Owner (isolated A-P1 only). CP-002B: IMPLEMENTATION AUTHORIZED — CANDIDATE FOR INDEPENDENT VERIFICATION. CP-002C–F NOT AUTHORIZED.
 
 ## CI và kiểm thử local
 
@@ -39,3 +39,7 @@ Owner Acceptance (2026-11-28): accepted runtime HEAD `80fb95175e902e6bea3caac518
 Clean npm ci NOT RUN; independent full-checkout replay BLOCKED by DNS. Full baseline smoke, full project typecheck and contract typecheck were Engineering-reported, not independently rerun. PostgreSQL round-trip NOT RUN (AR10 pure pre-cast only). Raw JSON parsing, duplicate-key/depth/envelope checks and hostile objects are outside A-P1. Integration and A01–A12 product acceptance NOT RUN. Temporary 1024-digit guard unreachable with valid current operands; no runtime coverage of that branch. Synthetic benchmark is not production capacity/SLA or a historical-data limit. No policy activation, financial posting, production security claim or B–F implementation.
 
 CP-001 ACCEPTED; CP-002A ACCEPTED (A-P1 only); CP-002B–F NOT AUTHORIZED. E15 remains the source for D06/D08.1–6 CONFIRMED and D09–D12 OPEN; E16 records acceptance only. No new CI, code or policy activation.
+
+## CP-002B / B-P1 v1.0 — CANDIDATE FOR INDEPENDENT VERIFICATION
+
+Parent `a5d0521ada0309f2cd69356ee1f6c5948f5607eb`; separate branch `checkpoint/cp-002b`. E17 supersedes E16 only for B-P1 authorization; earlier acceptance records remain historical. CP-001 and CP-002A ACCEPTED AND CLOSED; CP-002C–F NOT AUTHORIZED. D06/D08.1–6 CONFIRMED; D09–D12 OPEN. Design SHA `1d186c2dad025a96bfdc629d351e377173cd4006` read-only reference, no merge. `src/modules/rice/calculation/index.ts` imports accepted A-P1, pure rice/group PREVIEW only. See [B-P1 contract](docs/cp002/CP-002B_B-P1_CONTRACT.md), [authorization](docs/cp002/CP-002B_AUTHORIZATION.md), [report](checkpoints/CP-002B_REPORT.md) and [64-ID register](docs/cp002/CP-002_TEST_REGISTER.md). Reproduce: `python3 scripts/verify_cp002b.py --evidence-dir /tmp/snd-cp002b-independent` with exact existing local compiler. Local 10/10 groups, 600/600 independent-reference vectors (480 full-field +120 expected errors), 9/9 baseline smoke, typechecks/compile and 1k/10k/100k bag benchmarks PASS. Full checkout blocked DNS; compiler copied at exact pin; clean npm ci NOT RUN. No DB/UI/product/integration verification. Aggregate manifest `evidence/CP-002B/SHA256SUMS.txt`; original evidence ZIP in same folder. Prior A evidence and manifest unchanged. No new CI, merge, deployment, Codex, policy activation, C–F, real data or charges. Stop for independent verification.
