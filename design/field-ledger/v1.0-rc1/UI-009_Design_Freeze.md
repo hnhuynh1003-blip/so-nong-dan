@@ -1,0 +1,39 @@
+# SỔ NÔNG DÂN — UI-009 Final Design Polish & Freeze
+
+Version: Field Ledger v1.0 RC1 | Status: DESIGN FREEZE CANDIDATE — OWNER REVIEW PENDING. UI-008 explicitly approved in Design Studio; UI-009 not yet approved. This is an isolated design deliverable, not application code, registry activation or checkpoint acceptance.
+
+## Authority and continuity
+
+- Repository: `hnhuynh1003-blip/so-nong-dan`. Read-only branch listing in this session confirmed `checkpoint/cp-001-r2` still at `3ae5e2be06e401adaca044aad6f9376e9b15e5c5`; `checkpoint/cp-002a` at `80fb95175e902e6bea3caac518a8a6b25b9c1815`. No `design/field-ledger` branch observed.
+- Read current `docs/10_PROJECT_STATUS.md`, `docs/09_DECISION_LOG.md`, `docs/cp002/CP-002A_AUTHORIZATION.md`, `checkpoints/CP-002A_REPORT.md` at CP-002A HEAD. Also consulted relevant passages of `docs/cp002/SND_CP002_MASTER_SPECIFICATION_v1.0_DRAFT.md` and `docs/cp002/SND_CP002_v1.0_R1_MASTER_ADDENDUM.md`; E15/R1 precedence retained. CP-001 ACCEPTED. CP-002A A-P1 IMPLEMENTATION AUTHORIZED — CANDIDATE FOR INDEPENDENT VERIFICATION, NOT ACCEPTED. CP-002B–F NOT AUTHORIZED. D06 and D08.1–D08.6 CONFIRMED; D09–D12 OPEN; D05/D07 PROPOSED. D10 old app colors/order not inferred. Tree endpoint for CP-002A returned 404; individual files and branch listing were available; no full tree audit claimed.
+- DUDU Product Design v0.1.1 candidate guidance at `31d4465c8ffa72769f8131b3fb6612c906676abc`; no skill promotion. Requirements-first, reuse-first, free-first. User is single family operator, mobile-first; no real data. All source samples remain synthetic.
+- UI-001 Field Ledger selected; UI-002–008 approved by owner as design direction/screens. UI-009 incorporates their cumulative owner feedback: remove instruction clutter, one brand instead of duplicate page names, column-first rice entry 5 bags/column, no theme change. Approval record is a transcription of conversation decisions, not digital signature or product UAT.
+
+## Design contract
+
+Field Ledger: flat working surfaces, warm neutral paper, green accent, deliberate typography, readable numbers, plain Vietnamese, evidence/status only when meaningful. No decorative gradient, card clutter, artificial data, fantasy styling. Leaf mark reused; favicon adapts it into a small green tile, not a new brand. Font stack `Inter, Noto Sans, system-ui, sans-serif` is local fallback only; no network fonts or third-party assets installed. Light mode only. Semantic colors and base scale in `design_tokens.json`.
+
+| Surface | Frozen reference candidate | Behavior retained |
+|---|---|---|
+| Trang chủ | Home_390/1440.png | Direct task entries, partial production totals, review and source records |
+| Sản xuất | Farm_390/1440.png | Filtered records, land and expenses, form and details |
+| Cân lúa | Rice_390/1440.png | 5x5 board, column-first, three boards/page, keypad, undo, group, whole-sheet ratio |
+| Tài chính | Finance_390/1440.png | Cash/debt/accounts/loans/assets; separate cash from recognition |
+| Dữ liệu | Vault_390/1440.png | Source, imports, revisions, backup previews |
+| Báo cáo | Analytics_390/1440.png | Historical gaps, drill-down, no false complete totals |
+
+Mobile main navigation: Trang chủ / Sản xuất / Ghi nhanh / Tài chính / Dữ liệu. Report accessed from home/finance, finance remains selected for report. At <=1000 px primary bottom nav, at >=1001 px desktop rail. Main header: one visible brand on mobile; desktop rail already has brand, so header shows demo status and year only. Distinct year basis preserved (production, calendar, source, report valuation). Task and dialog titles retained. Semantic h1 retained for accessibility. 48x48 minimum tested for mobile nav; rice workspace retains its specialized navigation and 5x5 controls, separate from shared rail. Reduced-motion/focus styles, safe-area padding. Data coverage, no-save, blocked action warnings remain. Reuse local leaf SVG favicon; no external requests.
+
+## Current rice profile alignment (UI preview only)
+
+New CP-002A decision record supersedes historical UI-008 text that D08 was OPEN. Do not treat confirmation of D08 as production engine readiness. UI-009 removes current-flow impurity input and alternative tare methods; unknown is still distinct from zero; explicit no-tare is not enabled because current profile does not authorize it. Ratio entered for each sheet, not hardcoded as default rule. One price per sheet, group permits different prices. Exact proportional tare applied to whole sheet; after-tare net is distinct from rounded whole-kg settlement weight; ties up for nonnegative half kg; calculated amount retained exactly, no money rounding or threshold. No group re-rounding. Group amount shown only when all example sheets have known values; unknown remains dash. Example fixture: 63 bags, gross 2,803.1 kg, 1kg tare / 10 bags -> tare 6.3kg, net 2,796.8kg, settlement preview 2,797kg × 7,350 = 20,557,950 VND. Label `Tiền tính thử`, not confirmed revenue/cash/debt. Finalization disabled because no reviewed integrated engine or active policy registry. No automatic settlement, waiver or posting. D08.6 correction/replay needs original rule/approval/engine, unknown historical rules not invented. Revision/replay authoritative workflow still pending future authorized implementation; prototype does not implement it. UI preview arithmetic is deliberately independent isolated fixture-only BigInt code, not the CP-002 engine, not to be copied into production. Shared records/payments/accounts/assets and parent navigation engine unchanged from UI-008; rice weights and one-price sample retained, obsolete impurity fields removed.
+
+## Evidence / author review
+
+Three QA scripts run on final candidate using existing Chromium 144 with Playwright set_content (no new dependencies). See logs; 6 routes x 5 viewport regression, 5 top-level routes x 8 breakpoint sizes, sampled keyboard and focus restoration, six token contrast pairs, exact illustrative rice inputs and group scope cases. Direct file:// blocked by administrator: not verified in owner browser. Actual phone, zoom/screen reader and full WCAG audit NOT TESTED; UAT and independent design review pending. No production source or business test claimed, no deploy, DB, sync, import/OCR, persistence or CP changes. Historical 2023/24 report-only, 2025 unknown, 2026 shared sample; draft changes stay in session. No production route migration recommendation via iframes.
+
+Candidate rubric, author critique only: task/hierarchy 23/25 (same working paths, clearer shell), art direction 17/20 (consistent brand, favicon treatment, no new visual language), composition 18/20 (removed header redundancy; 320px still requires vertical scrolling), continuity/semantics 18/20 (regression and current profile sample checks, no persistence/replay). Subtotal 76/85 assessed. Remaining 15 accessibility/responsive/realistic states NOT TESTED fully, no normalized total or 80/100 pass. Mandatory product gates remain open. No independent score or user acceptance fabricated.
+
+## Freeze gate and handoff
+
+Review the final HTML and representative mobile/desktop captures, especially the updated rice review and ratio form. Once owner explicitly approves UI-009, record date and exact reference digest (SHA-256 in manifest). No approval or GitHub write implied by UI-008 acceptance. Proposed separate `design/field-ledger` branch from accepted CP-001 record HEAD, read-only referenced CP-002A decision files; only `design/` paths, no source, SQL, lockfiles, workflows, project status or checkpoint evidence modifications, no merge/CI/deploy. Owner must explicitly authorize branch/commit. Master Control uses design reference and current decisions for technical planning; unresolved application/policy/replay, D09–12 and validation gates remain in its scope. Preserve rollback to prior exact UI-008 artifact; do not silently migrate other modules or change business contracts.

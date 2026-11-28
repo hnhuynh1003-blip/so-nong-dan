@@ -1,0 +1,52 @@
+[
+  {
+    "name": "UI-001_Design_Review_Package.zip",
+    "bytes": 1108437,
+    "sha256": "3acb181b30d1f00ffbca17bc50ae77b4fb8f9a443ae2110c85b83da5592b8e6a"
+  },
+  {
+    "name": "UI-001_Design_Audit_v0.2.zip",
+    "bytes": 1606655,
+    "sha256": "c38b184cb3686e29d40cbbdb3f038d628bf7f5a6970c7fdc154fc126fd2523c4"
+  },
+  {
+    "name": "UI-001_Field_Ledger_Master_Control_Review.zip",
+    "bytes": 2723076,
+    "sha256": "fa931a70d56b05c8e50a658ae0a7d2f9db0652f92d8f44fde71e16f0e9f9093a"
+  },
+  {
+    "name": "UI-002_Field_Ledger_Design_Package.zip",
+    "bytes": 811297,
+    "sha256": "a4599906bad612b68ac9c1601f27581e1e6ebca90292faf80d0d2400ca59f55e"
+  },
+  {
+    "name": "UI-003_Rice_Weighing_Design_Package_v0.2.zip",
+    "bytes": 902417,
+    "sha256": "f8a5a5f86027655dba980a221f5345ab7973a1cd0b9e01e20c3bf98f2a8b25f8"
+  },
+  {
+    "name": "UI-004_Field_Ledger_Design_Package.zip",
+    "bytes": 1393892,
+    "sha256": "523b79026e9e2f38a535326f123b34454521f71366cd9730aa333f56b1468a97"
+  },
+  {
+    "name": "UI-005_Field_Ledger_Design_Package.zip",
+    "bytes": 1423136,
+    "sha256": "cf89cbbb3152b34b7807b24ebb2e233cd50dbb9f48d8c4feac18f25c061a84fc"
+  },
+  {
+    "name": "UI-006_Field_Ledger_Design_Package.zip",
+    "bytes": 1730687,
+    "sha256": "f340beac9b0c232b2317bb00981315ccc86197866f5e6294e8cb3a98671d8373"
+  },
+  {
+    "name": "UI-007_Field_Ledger_Design_Package.zip",
+    "bytes": 1285153,
+    "sha256": "0b40c15e56aeb5fe10d83238c0c08d2d316981e280fbceada63e81c480d09128"
+  },
+  {
+    "name": "UI-008_Field_Ledger_Unified_Design_Package.zip",
+    "bytes": 2440810,
+    "sha256": "3d0453f121bcd81fa37b9680c624e30940f8306e5e934914290c7f1f562e0db6"
+  }
+]

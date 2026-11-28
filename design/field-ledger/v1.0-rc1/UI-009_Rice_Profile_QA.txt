@@ -1,0 +1,4 @@
+63 bags: gross 2803.1 kg, tare 6.3 kg, net 2796.8 kg, rounded 2797 kg, exact preview 20,557,950 VND; finalization disabled PASS
+Incomplete group does not display full amount PASS
+Ratio inputs, invalid denominator and excessive tare rejection, two sheet group sum without re-rounding PASS
+Half kg tie in draft preview: 1.5 kg gross - 1 kg tare => 0.5 kg net => 1 kg settlement, 7351 VND retained PASS

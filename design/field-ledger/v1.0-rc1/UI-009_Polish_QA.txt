@@ -1,0 +1,17 @@
+Shared fixture and parent navigation engine byte-identical after function freeze: PASS
+Token contrast #1d3025 / #f5f6ee: 12.85:1 PASS
+Token contrast #53665a / #f5f6ee: 5.65:1 PASS
+Token contrast #8a4d11 / #f5f6ee: 6.13:1 PASS
+Token contrast #ffffff / #205b40: 7.98:1 PASS
+Token contrast #205b40 / #e2ede1: 6.62:1 PASS
+Token contrast #1267c5 / #f5f6ee: 5.12:1 PASS
+Chromium 144.0.7559.96; set_content, no dependency installation.
+320x700: five top-level screens; correct rail/bottom switch, one brand, no overflow, mobile nav >=48x48 PASS
+390x844: five top-level screens; correct rail/bottom switch, one brand, no overflow, mobile nav >=48x48 PASS
+Keyboard year/Tab and quick menu Enter/Escape focus restoration PASS
+900x900: five top-level screens; correct rail/bottom switch, one brand, no overflow, mobile nav >=48x48 PASS
+1000x800: five top-level screens; correct rail/bottom switch, one brand, no overflow, mobile nav >=48x48 PASS
+1001x800: five top-level screens; correct rail/bottom switch, one brand, no overflow, mobile nav >=48x48 PASS
+1050x800: five top-level screens; correct rail/bottom switch, one brand, no overflow, mobile nav >=48x48 PASS
+1280x720: five top-level screens; correct rail/bottom switch, one brand, no overflow, mobile nav >=48x48 PASS
+1440x900: five top-level screens; correct rail/bottom switch, one brand, no overflow, mobile nav >=48x48 PASS

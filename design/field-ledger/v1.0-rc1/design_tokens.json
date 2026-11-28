@@ -1,0 +1,11 @@
+{
+  "name": "Field Ledger v1.0 RC1",
+  "status": "candidate; reuse existing palette",
+  "color": {"canvas":"#F5F6EE","surface":"#FFFFFF","ink":"#1D3025","muted":"#53665A","primary":"#205B40","primaryDeep":"#174B35","selected":"#E2EDE1","border":"#D2DBD1","warning":"#8A4D11","warningSurface":"#FFF3DF","error":"#A72D29","focus":"#1267C5"},
+  "typography": {"family":"Inter, Noto Sans, system-ui, sans-serif","numbers":"tabular-nums","mobileBrandPx":19,"desktopRailBrandPx":18,"bodyPx":16,"labelsPx":"12-14","mobileNavPx":11,"mobileNavCompactPx":10.5,"note":"individual workspaces retain their accepted sizes; full accessibility audit pending"},
+  "spacing": [4,8,12,16,24,32],
+  "shape": {"controlRadiusPx":5,"navSelectedRadiusPx":3,"dialogRadiusPx":10},
+  "navigation": {"bottomMaxWidthPx":1000,"desktopMinWidthPx":1001,"desktopRailPx":208,"mobileNavMinTargetPx":48,"yearControlMinHeightPx":44,"rice":"specialized workspace, column-first, no common bottom nav"},
+  "motion":"respect reduced motion; no decorative animation",
+  "asset":"favicon.svg; adaptation of existing leaf mark; no external fonts or assets"
+}

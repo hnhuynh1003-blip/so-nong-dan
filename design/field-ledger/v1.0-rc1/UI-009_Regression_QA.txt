@@ -1,0 +1,15 @@
+Chromium 144.0.7559.96; single HTML embedded local frame documents; no install.
+Direct file:// BLOCKED/FAIL: Page.goto: net::ERR_BLOCKED_BY_ADMINISTRATOR at file:///mnt/data/ui009/So_Nong_Dan_UI009.html
+390x844: six routes, shared navigation, one visible frame, no horizontal overflow or uncaught JS errors PASS
+320x700: six routes, shared navigation, one visible frame, no horizontal overflow or uncaught JS errors PASS
+768x1024: six routes, shared navigation, one visible frame, no horizontal overflow or uncaught JS errors PASS
+1280x720: six routes, shared navigation, one visible frame, no horizontal overflow or uncaught JS errors PASS
+1440x900: six routes, shared navigation, one visible frame, no horizontal overflow or uncaught JS errors PASS
+Rice: five bags per column, no overwrite; same in-session board retained across route leave/return PASS
+Home sale action opens actual UI-004 form; draft retained in same session PASS
+Global quick menu + actual financial entry and import preview routes PASS
+Home record -> farm -> vault -> back to selected record -> finance payments -> back PASS
+Analytics drill -> vault source -> farm linked record -> back twice, preserving source dialog PASS
+Shared year 2025 and report-only 2024; no 2026 data leakage; rice explicit sample year switch and back restoration PASS
+Vault all-years deep link opens correct 2026 scope and back restores all-years filter + 2025 shared scope PASS
+Nested route repetition vault -> farm -> vault uses temporary view; back restores both previous dialogs PASS
