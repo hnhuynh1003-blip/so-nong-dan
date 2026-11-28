@@ -7,7 +7,12 @@ const {previewRiceSheetBP1:sheet,B_PROFILE}=await import(pathToFileURL(join(proc
 const arg=process.argv[2];if(!/^(1000|10000|100000)$/.test(arg))throw Error('Benchmark allowed sizes: 1000/10000/100000');const n=Number(arg);assert.ok(n<=B_PROFILE.maxSlots);
 const batch={ownerId:'synthetic',sheetId:'benchmark',batchId:'b'};
 const slots=Array.from({length:n},(_,i)=>({position:String(i+1),bag:{...batch,bagId:`bag-${i+1}`,mode:'three-digit',raw:'443'}}));
-const input={ownerId:batch.ownerId,sheetId:batch.sheetId,groupId:null,batches:[batch],slots,tare:{method:'proportional',scope:'sheet',bagsPerKg:{numerator:'10',denominator:'1'}},priceVndPerKg:'7350',saleScope:'whole-sheet'};
+const input={ownerId:batch.ownerId,sheetId:batch.sheetId,revisionId:'r1',groupId:null,batches:[batch],slots,tare:{method:'proportional',scope:'sheet',bagsPerKg:{numerator:'10',denominator:'1'}},priceVndPerKg:'7350',saleScope:'whole-sheet'};
 const rssBefore=process.memoryUsage().rss;const start=performance.now();const result=sheet(input);const elapsedMs=performance.now()-start;
 const g=44300n*BigInt(n),t=100n*BigInt(n),p=g-t,s=(p+500n)/1000n*1000n,a=s/1000n*7350n;assert.equal(result.count,String(n));for(const [k,v] of Object.entries({grossGram:g,tareGram:t,physicalNetGram:p,settlementGram:s,residualGram:s-p,amountVnd:a}))assert.deepEqual(result[k],{numerator:String(v),denominator:'1'});
-const serial=JSON.stringify(result);const digest=createHash('sha256').update(serial).digest('hex');console.log(JSON.stringify({bags:n,slotSpan:result.slotSpan,columns:result.columns.length,boards:result.boards.length,pages:result.pages.length,elapsedMs,throughputBagsPerSecond:n/(elapsedMs/1000),rssBefore,rssAfter:process.memoryUsage().rss,maxRssKiB:process.resourceUsage().maxRSS,serializedBytes:Buffer.byteLength(serial),digest,grossGram:result.grossGram,amountVnd:result.amountVnd}));
+assert.equal(result.revisionId,'r1');
+const {revisionId,...legacyResult}=result;
+const legacyDigest=createHash('sha256').update(JSON.stringify(legacyResult)).digest('hex');
+const legacyExpected={1000:'2aa5bde1fbe7c7cae077348c7db9d76acdeda9f04fcb8fbb533ebfea181b9662',10000:'2e1a459111144d4a652956df3380338eb09ca6220852e25afdecc41bf10f6ced',100000:'99101e3f6ceb594baa6db6676c02492701f7cadfab4b09f52fb596659233fca7'};
+assert.equal(legacyDigest,legacyExpected[n]);
+const serial=JSON.stringify(result);const digest=createHash('sha256').update(serial).digest('hex');console.log(JSON.stringify({bags:n,slotSpan:result.slotSpan,columns:result.columns.length,boards:result.boards.length,pages:result.pages.length,elapsedMs,throughputBagsPerSecond:n/(elapsedMs/1000),rssBefore,rssAfter:process.memoryUsage().rss,maxRssKiB:process.resourceUsage().maxRSS,serializedBytes:Buffer.byteLength(serial),digest,revisionId,legacyDigest,legacyDigestMatch:true,grossGram:result.grossGram,amountVnd:result.amountVnd}));

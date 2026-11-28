@@ -74,3 +74,14 @@ Totals: 64 registered identifiers; 13 with PASS for authorized A-P1 portions; 51
 ## B-P1 candidate disposition (2026-11-28)
 
 All 64 original IDs retained; B-01..10 are variant labels only. Historical 13 A-P1 portion PASS entries unchanged. Local B-P1 portions PASS for 14 IDs (CAL-01/02/05/06/07/08/11, T03/T04, AR03/04/05/09/11-a/c); 50 do not have a B-P1 PASS. CAL-03/04 generic pure fixture-only recheck recorded without activation. No deferred portion or product acceptance marked PASS. 10 Node test groups, 600 oracle vectors (480 full-field matches +120 expected-error matches), 480 repeated/permuted successes and 639 conservation checks are execution counts, not ID counts. Benchmarks 1000/10000/100000 actual synthetic bags PASS. Independent verifier and owner acceptance pending. See `checkpoints/CP-002B_REPORT.md`. Parent register preserved in immutable A closure commit.
+
+## CP-002B-R1 B-IV-01 remediation disposition (2026-11-28)
+
+Original 64 rows above remain historical unchanged. E18 authorizes B-IV-01 variants only, associated with existing IDs (no new registered identifiers):
+
+- CAL-11 — PASS (local B-R1 variant): required explicit revisionId; missing, wrong type, malformed, empty, non-ASCII/newline/descriptor and 128/129-character boundary; existing error precedence preserved.
+- T04 / AR04 — PASS (local B-R1 variant): stable sheetId duplicate protection for r1/r2 in both orders, including empty sheets; same sheet can be previewed independently. No authoritative source-consumption or concurrency tests.
+- AR09 — PASS (local B-R1 variant): explicit r1/r2 preservation, same numeric result with metadata-only change, exact recalculation of changed r2 bag with r1 immutable, distinct group selected revisions, permutation and no input mutation.
+- AR11-a/c — PASS (local B-R1 variant): pure deterministic PREVIEW only, no journal/receipt/persistence; exact amount 7351 at r1, 14702 at edited r2 fixture. AR11-b/d and integration/financial/posting NOT RUN.
+
+Full local B regression: 12/12 groups, 624/624 oracle (488 full-field +136 expected errors; original 600 unchanged after revision projection, new 24), 488 permutation, 647 conservation checks, baseline Node 9/9 and all three bag benchmarks PASS; benchmark legacy projections 3/3 MATCH. Original 13 A-P1 and 14 B-P1 portion dispositions retained, not broadened. Independent Verifier's parent 847/847 is reported history, not an R1 replay; independent R1 verification pending. No new registered IDs; 64/64 preserved. See `checkpoints/CP-002B-R1_REPORT.md` and `evidence/CP-002B-R1/LOCAL_VERIFICATION.zip`. No full-scope PASS, no SQL/driver/registry/replay/persistence/consumption/concurrency/posting/product acceptance.

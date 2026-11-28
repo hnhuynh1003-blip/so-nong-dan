@@ -9,9 +9,9 @@ const {previewRiceSheetBP1:sheet,previewRiceGroupBP1:group,RiceError,B_PROFILE}=
 const A=await import(pathToFileURL(join(build,'modules/shared/exact-arithmetic/index.js')));
 const q=(n,d='1')=>({numerator:String(n),denominator:String(d)});
 function make(sid,raws=[],opts={}){
-  const {ratio=q(10),price='7350',positions=raws.map((_,i)=>String(i+1)),mode='gram',groupId='g'}=opts;
+  const {ratio=q(10),price='7350',positions=raws.map((_,i)=>String(i+1)),mode='gram',groupId='g',revisionId='r1'}=opts;
   const b={ownerId:'o',sheetId:sid,batchId:`batch-${sid}`};
-  return {ownerId:'o',sheetId:sid,groupId,batches:[b],slots:raws.map((raw,i)=>({position:String(positions[i]),bag:raw===null||raw===''?raw:{...b,bagId:`${sid}-bag-${i+1}`,mode,raw:String(raw)}})),tare:ratio===null?null:{method:'proportional',scope:'sheet',bagsPerKg:ratio},priceVndPerKg:price,saleScope:'whole-sheet'};
+  return {ownerId:'o',sheetId:sid,revisionId,groupId,batches:[b],slots:raws.map((raw,i)=>({position:String(positions[i]),bag:raw===null||raw===''?raw:{...b,bagId:`${sid}-bag-${i+1}`,mode,raw:String(raw)}})),tare:ratio===null?null:{method:'proportional',scope:'sheet',bagsPerKg:ratio},priceVndPerKg:price,saleScope:'whole-sheet'};
 }
 const grp=(...sheets)=>({ownerId:'o',groupId:'g',sheets});
 function error(fn,code){assert.throws(fn,e=>e instanceof RiceError&&e.code===code);}
@@ -102,5 +102,42 @@ test('B-10 AR09 AR11-a: independent seeded full-field oracle, determinism and co
         assert.equal(s.status,'PREVIEW');assert.ok(!('journal' in s)&&!('receipt' in s));}
     }assert.equal(JSON.stringify(c.input),before,c.id);
   }
-  assert.equal(cases.length,600);assert.equal(success,480);assert.equal(errors,120);console.log(JSON.stringify({oracleVectors:cases.length,exactFullFieldMatches:success,expectedErrorMatches:errors,permutations,conservation}));
+  assert.equal(cases.length,624);assert.equal(success,488);assert.equal(errors,136);console.log(JSON.stringify({oracleVectors:cases.length,exactFullFieldMatches:success,expectedErrorMatches:errors,permutations,conservation}));
+});
+
+
+test('B-IV-01 AR09 AR11-a/c: explicit revision identity, independent results and changed bag',()=>{
+  const r1=frozen(make('stable',['1500'],{ratio:q(1),price:'7351',revisionId:'r1'}));
+  const r2=frozen(changed(r1,x=>x.revisionId='r2'));
+  const beforeInput=JSON.stringify(r1),a=frozen(sheet(r1)),beforeResult=JSON.stringify(a),b=sheet(r2);
+  assert.equal(a.sheetId,'stable');assert.equal(a.revisionId,'r1');assert.equal(b.sheetId,'stable');assert.equal(b.revisionId,'r2');
+  const {revisionId:ar,...aa}=a,{revisionId:br,...bb}=b;assert.deepEqual(aa,bb);
+  const edited=frozen(changed(r2,x=>x.slots[0].bag.raw='2500')),c=sheet(edited);
+  assertQuantity(c,{sheetId:'stable',revisionId:'r2',grossGram:q(2500),tareGram:q(1000),physicalNetGram:q(1500),commercialNetGram:q(1500),settlementGram:q(2000),residualGram:q(500),priceVndPerKg:'7351',amountVnd:q(14702),status:'PREVIEW'});
+  assertQuantity(a,{grossGram:q(1500),tareGram:q(1000),physicalNetGram:q(500),settlementGram:q(1000),amountVnd:q(7351)});
+  assert.equal(JSON.stringify(r1),beforeInput);assert.equal(JSON.stringify(a),beforeResult);assert.equal(r2.slots[0].bag.raw,'1500');
+  assert.equal(sheet(make('empty',[],{revisionId:'R:0._-'})).revisionId,'R:0._-');
+  assert.equal(sheet(make('limit',[],{revisionId:'a'.repeat(128)})).revisionId,'a'.repeat(128));
+  const other=frozen(make('other',['44300'],{ratio:q(3),revisionId:'r2'}));
+  const input=frozen(grp(other,edited)),beforeGroup=JSON.stringify(input),g=group(input);
+  assert.deepEqual(g.sheets.map(s=>[s.sheetId,s.revisionId]),[['other','r2'],['stable','r2']]);
+  assert.deepEqual(g.sheets,[sheet(other),c]);assert.equal(JSON.stringify(g),JSON.stringify(group(grp(edited,other))));
+  assert.equal(JSON.stringify(input),beforeGroup);assert.deepEqual(group(grp(other,r1)).sheets.map(s=>s.revisionId),['r2','r1']);
+  for(const v of [a,b,c,g,...g.sheets]){assert.equal(v.status,'PREVIEW');for(const k of ['journal','receipt','snapshot','mutationId','persistence'])assert.ok(!(k in v));}
+});
+test('B-IV-01 CAL-11 T04 AR04: required bounded revision, duplicate stable sheet across revisions',()=>{
+  const a=make('a',['44300'],{revisionId:'r1'}),b=changed(a,x=>x.revisionId='r2');
+  error(()=>sheet(changed(a,x=>delete x.revisionId)),'INVALID_SHAPE');
+  for(const v of [undefined,null,1,true,[],{}])error(()=>sheet(changed(a,x=>x.revisionId=v)),'INVALID_TYPE');
+  for(const v of ['',' r1','r1\n','-r1','r/1','r１','r\u0000'])error(()=>sheet(changed(a,x=>x.revisionId=v)),'NONCANONICAL');
+  error(()=>sheet(changed(a,x=>x.revisionId='r'.repeat(129))),'RESOURCE_LIMIT');
+  const hidden=structuredClone(a);Object.defineProperty(hidden,'revisionId',{enumerable:false,value:'r1'});error(()=>sheet(hidden),'INVALID_SHAPE');
+  const accessor=structuredClone(a);Object.defineProperty(accessor,'revisionId',{enumerable:true,get(){throw Error('revision accessor executed')}});error(()=>sheet(accessor),'INVALID_SHAPE');
+  error(()=>group(grp(a,b)),'DUPLICATE_ID');error(()=>group(grp(b,a)),'DUPLICATE_ID');
+  // Duplicate sheet protection does not depend on duplicate bag/batch IDs or occupied slots.
+  error(()=>group(grp(make('empty',[],{revisionId:'r1'}),{...make('empty',[],{revisionId:'r2'}),batches:[]})),'DUPLICATE_ID');
+  error(()=>group(grp(a,changed(make('b'),x=>delete x.revisionId))),'INVALID_SHAPE');
+  // Root identity is checked before tare/price (unchanged existing precedence).
+  error(()=>sheet(changed(a,x=>{x.revisionId='';x.priceVndPerKg='bad'})),'NONCANONICAL');
+  error(()=>sheet(changed(a,x=>{delete x.revisionId;x.priceVndPerKg='bad'})),'INVALID_SHAPE');
 });

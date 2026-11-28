@@ -5,7 +5,8 @@ No installs, network, database, CI, posting, or writes to tracked files.
 import argparse, datetime, hashlib, json, os, platform, shutil, subprocess, sys, tempfile
 from pathlib import Path
 ROOT=Path(__file__).resolve().parents[1]
-PARENT='a5d0521ada0309f2cd69356ee1f6c5948f5607eb'
+PARENT='04a839f94da58ab6842445b00626077704775b6d'
+LEGACY_ORACLE_SHA='62bec71a9f4e8a2bd0afbc5b24b7b387e087fcdd15b0ac09c956080213b3825a'
 A_BLOB='c5d4c206d39e2190f44b58c9c4c67f7596e232b0'
 A_SHA='e3031c59ed667082a3bd17f94a2afa45612d0282dbf615aea9d7e287b43e68bf'
 LOCK_SHA='154568f6dab08e55c61fc6b8362fb4d6b020ceafa60cbbc1c86a3e6c8a94aaa2'
@@ -38,7 +39,7 @@ before={};rc=1
 try:
     before=source_hashes();(out/'TESTED_SOURCE_SHA256.txt').write_text(''.join(f'{h}  {p}\n' for p,h in before.items()))
     toolchain=ROOT/'node_modules/typescript/lib/tsc.js';npm='npm.cmd' if os.name=='nt' else 'npm'
-    envinfo=dict(utc=datetime.datetime.now(datetime.timezone.utc).isoformat(),platform=platform.platform(),machine=platform.machine(),python=sys.version,expected_parent=PARENT,compiler_path=str(toolchain),compiler_package_sha256=sha(ROOT/'node_modules/typescript/package.json'),compiler_entry_sha256=sha(toolchain),compiler_impl_sha256=sha(ROOT/'node_modules/typescript/lib/_tsc.js'),profile='B-P1 v1.0',oracle_seed=2026112802,local_checkout=(ROOT/'.git').exists())
+    envinfo=dict(utc=datetime.datetime.now(datetime.timezone.utc).isoformat(),platform=platform.platform(),machine=platform.machine(),python=sys.version,expected_parent=PARENT,compiler_path=str(toolchain),compiler_package_sha256=sha(ROOT/'node_modules/typescript/package.json'),compiler_entry_sha256=sha(toolchain),compiler_impl_sha256=sha(ROOT/'node_modules/typescript/lib/_tsc.js'),profile='B-P1 v1.0',remediation='B-IV-01',oracle_seed=2026112802,local_checkout=(ROOT/'.git').exists())
     (out/'environment.json').write_text(json.dumps(envinfo,indent=2)+'\n')
     n=run('node-version',['node','--version']).read_text().strip();m=run('npm-version',[npm,'--version']).read_text().strip();t=run('ts-version',['node',toolchain,'--version']).read_text().strip();run('python-version',[sys.executable,'--version']);run('git-version',['git','--version'])
     require('toolchain-pins',(n,m,t)==('v22.16.0','10.9.2','Version 5.8.3'),f'{n}, {m}, {t}; no install performed')
@@ -56,7 +57,9 @@ try:
         v1=scratch/'vectors.jsonl';v2=scratch/'vectors-repeat.jsonl'
         run('oracle-generate',[sys.executable,'tests/cp002b/oracle.py'],stdout_file=v1);run('oracle-repeat',[sys.executable,'tests/cp002b/oracle.py'],stdout_file=v2)
         h1=sha(v1);h2=sha(v2);require('oracle-deterministic',h1==h2,'Seed 2026112802, '+h1)
-        (out/'oracle-digests.json').write_text(json.dumps(dict(seed=2026112802,first=h1,repeat=h2,bytes=v1.stat().st_size,vectors=600),indent=2)+'\n')
+        legacy=scratch/'legacy-projection.jsonl';run('oracle-legacy-projection',[sys.executable,'tests/cp002b/oracle.py','--legacy-projection'],stdout_file=legacy)
+        lh=sha(legacy);require('oracle-legacy-continuity',lh==LEGACY_ORACLE_SHA,'Original 600 vectors with only revision metadata removed: '+lh)
+        (out/'oracle-digests.json').write_text(json.dumps(dict(seed=2026112802,first=h1,repeat=h2,bytes=v1.stat().st_size,vectors=624,legacyProjection=lh,legacyExpected=LEGACY_ORACLE_SHA),indent=2)+'\n')
         env=dict(os.environ,SND_B_BUILD=str(dist),SND_B_VECTORS=str(v1))
         run('rice-tests',['node','--test','tests/cp002b/rice.test.mjs'],env=env)
         benches=[]

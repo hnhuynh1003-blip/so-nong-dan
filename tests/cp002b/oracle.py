@@ -12,8 +12,8 @@ def wire(x):
     v=F(x);return {'numerator':str(v.numerator),'denominator':str(v.denominator)}
 def value(w):return F(int(w['numerator']),int(w['denominator']))
 def batch(s):return dict(ownerId=s['ownerId'],sheetId=s['sheetId'],batchId='batch-'+s['sheetId'])
-def make_sheet(sid,raws=(),ratio=F(10),price='7350',group='g',positions=None,mode='gram'):
-    s=dict(ownerId='o',sheetId=sid,groupId=group,batches=[],slots=[],tare=None if ratio is None else dict(method='proportional',scope='sheet',bagsPerKg=wire(ratio)),priceVndPerKg=price,saleScope='whole-sheet')
+def make_sheet(sid,raws=(),ratio=F(10),price='7350',group='g',positions=None,mode='gram',revision='r1'):
+    s=dict(ownerId='o',sheetId=sid,revisionId=revision,groupId=group,batches=[],slots=[],tare=None if ratio is None else dict(method='proportional',scope='sheet',bagsPerKg=wire(ratio)),priceVndPerKg=price,saleScope='whole-sheet')
     b=batch(s);s['batches']=[b]
     for i,raw in enumerate(raws):
         pos=positions[i] if positions is not None else i+1
@@ -42,7 +42,7 @@ def sheet(s):
             shifted=p/1000+F(1,2);z=1000*(shifted.numerator//shifted.denominator);res=z-p
             status='MISSING_PRICE'
             if price is not None:a=F(z,1000)*int(price);status='COMPLETE'
-    return dict(status='PREVIEW',profile='B-P1 v1.0',ownerId=s['ownerId'],sheetId=s['sheetId'],groupId=s['groupId'],saleScope='whole-sheet',slotSpan=slots[-1]['position'] if slots else '0',slots=slots,columns=bucket_stats(buckets[0]),boards=bucket_stats(buckets[1]),pages=bucket_stats(buckets[2]),count=str(n),grossGram=wire(g),tareRatio=wire(r),tareGram=wire(t),physicalNetGram=wire(p),commercialNetGram=wire(p),settlementGram=wire(z),residualGram=wire(res),priceVndPerKg=price,amountVnd=wire(a),completeness=status)
+    return dict(status='PREVIEW',profile='B-P1 v1.0',ownerId=s['ownerId'],sheetId=s['sheetId'],revisionId=s['revisionId'],groupId=s['groupId'],saleScope='whole-sheet',slotSpan=slots[-1]['position'] if slots else '0',slots=slots,columns=bucket_stats(buckets[0]),boards=bucket_stats(buckets[1]),pages=bucket_stats(buckets[2]),count=str(n),grossGram=wire(g),tareRatio=wire(r),tareGram=wire(t),physicalNetGram=wire(p),commercialNetGram=wire(p),settlementGram=wire(z),residualGram=wire(res),priceVndPerKg=price,amountVnd=wire(a),completeness=status)
 
 def group(g):
     ss=[sheet(s) for s in sorted(g['sheets'],key=lambda x:x['sheetId'])];cov={}
@@ -60,7 +60,7 @@ def cases():
             else:raws.append(str(rng.randint(3000,99999)) if mode=='gram' else str(rng.randint(30,999)).zfill(3))
         ratio=rng.choice([None,F(1,2),F(1),F(3,2),F(7,3),F(3),F(10),F(11,10),F(99,7)])
         price=rng.choice([None,'1','7351','7350',str(rng.randrange(1,999999)),'9007199254740993'])
-        s=make_sheet(sid,raws,ratio,price,positions=pos,mode=mode);rng.shuffle(s['slots']);return s
+        s=make_sheet(sid,raws,ratio,price,positions=pos,mode=mode,revision='r1' if sum(map(ord,sid))%2 else 'r2');rng.shuffle(s['slots']);return s
     for i in range(320):
         s=random_sheet(f's{i}');yield dict(id=f'sheet-{i}',op='sheet',input=s,expected=sheet(s))
     for i in range(160):
@@ -82,5 +82,39 @@ def cases():
         else:s['saleScope']='partial';code='UNSUPPORTED_PROFILE'
         yield dict(id=f'error-{i}',op='sheet',input=s,error=code)
 
+def revision_cases():
+    # Independent Fraction results for real bag arrays, explicit revision fixtures.
+    from copy import deepcopy
+    first=make_sheet('revision',[1500],F(1),'7351',revision='r1')
+    second=deepcopy(first);second['revisionId']='r2'
+    edited=deepcopy(second);edited['slots'][0]['bag']['raw']='2500'
+    other=make_sheet('other',[44300],F(3),'7350',revision='r2')
+    empty=make_sheet('empty',revision='R:0._-')
+    longest=make_sheet('longest',revision='a'*128)
+    for name,s in [('r1',first),('r2',second),('r2-edited',edited),('empty',empty),('max-id',longest)]:
+        yield dict(id='revision-'+name,op='sheet',input=s,expected=sheet(s))
+    for name,ss in [('selected',[other,first]),('updated',[edited,other]),('empty',[empty,other])]:
+        g=dict(ownerId='o',groupId='g',sheets=ss)
+        yield dict(id='revision-group-'+name,op='group',input=g,expected=group(g))
+    invalid=[(None,'INVALID_TYPE'),(7,'INVALID_TYPE'),(False,'INVALID_TYPE'),([], 'INVALID_TYPE'),({},'INVALID_TYPE'),('', 'NONCANONICAL'),(' r1','NONCANONICAL'),('r1\n','NONCANONICAL'),('-r1','NONCANONICAL'),('r/1','NONCANONICAL'),('r١','NONCANONICAL'),('r'*129,'RESOURCE_LIMIT')]
+    for i,(v,code) in enumerate(invalid):
+        s=deepcopy(first);s['revisionId']=v
+        yield dict(id=f'revision-invalid-{i}',op='sheet',input=s,error=code)
+    s=deepcopy(first);del s['revisionId'];yield dict(id='revision-missing',op='sheet',input=s,error='INVALID_SHAPE')
+    # Duplicate stable identity even when revision is different; test both orders.
+    for i,ss in enumerate(([first,second],[second,first])):
+        yield dict(id=f'revision-duplicate-{i}',op='group',input=dict(ownerId='o',groupId='g',sheets=ss),error='DUPLICATE_ID')
+    yield dict(id='revision-group-missing',op='group',input=dict(ownerId='o',groupId='g',sheets=[other,s]),error='INVALID_SHAPE')
+
+def strip_revision(v):
+    if isinstance(v,dict):return {k:strip_revision(x) for k,x in v.items() if k!='revisionId'}
+    if isinstance(v,list):return [strip_revision(x) for x in v]
+    return v
+
 if __name__=='__main__':
-    for c in cases():print(json.dumps(c,separators=(',',':'),ensure_ascii=True))
+    if sys.argv[1:]==['--legacy-projection']:
+        for c in cases():print(json.dumps(strip_revision(c),separators=(',',':'),ensure_ascii=True))
+    elif not sys.argv[1:]:
+        from itertools import chain
+        for c in chain(cases(),revision_cases()):print(json.dumps(c,separators=(',',':'),ensure_ascii=True))
+    else:raise SystemExit('Unknown arguments')

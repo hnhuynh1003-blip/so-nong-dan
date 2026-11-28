@@ -21,7 +21,7 @@ export interface BatchInput { readonly ownerId: string; readonly sheetId: string
 export interface BagInput extends BatchInput { readonly bagId: string; readonly mode: 'three-digit'|'gram'; readonly raw: string }
 export interface SlotInput { readonly position: string; readonly bag: BagInput|null|'' }
 export interface SheetInput {
-  readonly ownerId: string; readonly sheetId: string; readonly groupId: string|null;
+  readonly ownerId: string; readonly sheetId: string; readonly revisionId: string; readonly groupId: string|null;
   readonly batches: readonly BatchInput[]; readonly slots: readonly SlotInput[];
   readonly tare: null|{ readonly method:'proportional'; readonly scope:'sheet'; readonly bagsPerKg:Q };
   readonly priceVndPerKg: string|null; readonly saleScope:'whole-sheet';
@@ -36,7 +36,7 @@ export interface Bucket extends Stats { readonly index:string }
 export type SheetCompleteness = 'EMPTY'|'MISSING_TARE'|'MISSING_PRICE'|'COMPLETE';
 export interface SheetPreview extends Stats {
   readonly status:'PREVIEW'; readonly profile:'B-P1 v1.0'; readonly ownerId:string;
-  readonly sheetId:string; readonly groupId:string|null; readonly saleScope:'whole-sheet';
+  readonly sheetId:string; readonly revisionId:string; readonly groupId:string|null; readonly saleScope:'whole-sheet';
   readonly slotSpan:string; readonly slots:readonly SlotTrace[];
   readonly columns:readonly Bucket[]; readonly boards:readonly Bucket[]; readonly pages:readonly Bucket[];
   readonly tareRatio:Q|null; readonly tareGram:Q|null; readonly physicalNetGram:Q|null;
@@ -85,13 +85,13 @@ const ZERO=fromInteger('0'),ONE=fromInteger('1'),HUNDRED=fromInteger('100'),KG=f
 function positive(q:Q):Q {if(compare(q,ZERO)<=0) fail('DOMAIN','Expected positive quantity');return q;}
 function exactPositiveInteger(v:unknown):Q {return positive(fromInteger(v));}
 function requireProfile(v:unknown,expected:string):void {if(str(v)!==expected) fail('UNSUPPORTED_PROFILE','Unsupported B-P1 option');}
-interface Inspected {ownerId:string;sheetId:string;groupId:string|null;batches:readonly unknown[];
+interface Inspected {ownerId:string;sheetId:string;revisionId:string;groupId:string|null;batches:readonly unknown[];
   slots:readonly unknown[];tare:unknown;price:unknown}
 function inspect(v:unknown):Inspected {
-  const r=rec(v,['ownerId','sheetId','groupId','batches','slots','tare','priceVndPerKg','saleScope']);
+  const r=rec(v,['ownerId','sheetId','revisionId','groupId','batches','slots','tare','priceVndPerKg','saleScope']);
   const batches=list(r.batches,B_PROFILE.maxBatches), slots=list(r.slots,B_PROFILE.maxSlots);
-  const ownerId=id(r.ownerId),sheetId=id(r.sheetId),groupId=r.groupId===null?null:id(r.groupId);
-  requireProfile(r.saleScope,'whole-sheet');return {ownerId,sheetId,groupId,batches,slots,tare:r.tare,price:r.priceVndPerKg};
+  const ownerId=id(r.ownerId),sheetId=id(r.sheetId),revisionId=id(r.revisionId),groupId=r.groupId===null?null:id(r.groupId);
+  requireProfile(r.saleScope,'whole-sheet');return {ownerId,sheetId,revisionId,groupId,batches,slots,tare:r.tare,price:r.priceVndPerKg};
 }
 function position(v:unknown):bigint {const p=parseInteger(v);if(p<=0n) fail('DOMAIN','Position must be positive');
   if(p>BigInt(B_PROFILE.maxSlotPosition)) fail('RESOURCE_LIMIT','Slot span exceeds B-P1 bound');return p;}
@@ -150,7 +150,7 @@ function sheet(s:Inspected,bagIds:Set<string>,batchIds:Set<string>):SheetPreview
     residualGram=subtract(settlementGram,physicalNetGram);completeness='MISSING_PRICE';
     if(price!==null){amountVnd=multiply(convertMass(settlementGram,'g','kg'),price);completeness='COMPLETE';}
   }}
-  return {status:'PREVIEW',profile:B_PROFILE.name,ownerId:s.ownerId,sheetId:s.sheetId,groupId:s.groupId,saleScope:'whole-sheet',
+  return {status:'PREVIEW',profile:B_PROFILE.name,ownerId:s.ownerId,sheetId:s.sheetId,revisionId:s.revisionId,groupId:s.groupId,saleScope:'whole-sheet',
     slotSpan:String(temp.at(-1)?.p??0n),slots:temp.map(x=>x.trace),columns:buckets(cm),boards:buckets(bm),pages:buckets(pm),...stats(total),
     tareRatio:ratio,tareGram,physicalNetGram,commercialNetGram:physicalNetGram,settlementGram,residualGram,
     priceVndPerKg:price?.numerator??null,amountVnd,completeness};
